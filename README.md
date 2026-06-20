@@ -1,14 +1,25 @@
 # cpfetch
 
-Fetch competitive programming problem statements, samples, and metadata
-from Codeforces, AtCoder, CodeChef, and CSES.
+Easily fetch competitive programming problem statements and sample tests, right from your terminal.
 
-## Install
+For each problem, cpfetch saves a formatted `problem.md` (with LaTeX math restored), a `tests/` directory with numbered `.in`/`.out` sample files, and a `.meta.json` for re-fetching. No browser extension required, everything runs from the command line.
+
+- **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES
+- **Problem body + samples**: the full problem statement alongside ready-to-use test files
+- **Math rendering**: correctly extracts inline math / math blocks from all of the supported platforms
+
+Requires [Playwright](https://github.com/microsoft/playwright) in order to bypass Cloudflare and process sites with dynamic content (e.g. CodeChef).
+
+## Build + Setup
 
 ```sh
 uv sync
 uv run cpfetch setup
 ```
+
+> [!NOTE]
+> `cpfetch setup` installs Playwright's headless Chromium browser.
+> If you wish to remove it later, you have to run `uv run playwright uninstall chromium`.
 
 ## Usage
 
@@ -40,4 +51,4 @@ uv run pytest -m integration tests/
 
 ## License
 
-AGPLv3 or later.
+[AGPLv3 or later](LICENSE).
