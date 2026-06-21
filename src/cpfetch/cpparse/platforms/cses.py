@@ -1,10 +1,12 @@
 """CSES problem statement parser.
 
-CSES generates an <h1 id="example"> heading containing all sample input/output content inline with
-the problem statement. This duplicates the structured test data stored in tests/, so the Example
-section is stripped during normalization. Before stripping, the sample content is harvested.
+CSES generates <h1 id="example"> or <h1 id="exampleN"> headings containing sample input/output
+content inline with the problem statement. This duplicates the structured test data stored in
+tests/, so the Example section is stripped during normalization. Before stripping, the sample
+content is harvested from every example heading.
 """
 
+import re
 from typing import override
 
 from bs4 import BeautifulSoup
@@ -13,27 +15,37 @@ from bs4.element import Tag
 from ...cp_metadata import MathExtractor, SampleCase
 from ..lib import BaseParser, extract_math_nodes
 
+_EXAMPLE_ID_RE = re.compile(r"^example\d*$")
+
 
 def _extract_cses_samples(soup: BeautifulSoup) -> list[SampleCase]:
-    example = soup.find("h1", id="example")
-    if example is None:
+    examples = soup.find_all("h1", id=_EXAMPLE_ID_RE)
+    if not examples:
         return []
 
-    to_remove: list[Tag] = [example]
-    pres: list[Tag] = []
+    all_samples: list[SampleCase] = []
+    all_to_remove: list[Tag] = []
 
-    for sibling in example.find_next_siblings():
-        if sibling.name == "h1":
-            break
-        to_remove.append(sibling)
-        if sibling.name == "pre":
-            pres.append(sibling)
+    for example in examples:
+        to_remove: list[Tag] = [example]
+        pres: list[Tag] = []
 
-    samples = [SampleCase(input=pres[i].get_text(), output=pres[i + 1].get_text()) for i in range(0, len(pres) - 1, 2)]
+        for sibling in example.find_next_siblings():
+            if sibling.name == "h1":
+                break
+            to_remove.append(sibling)
+            if sibling.name == "pre":
+                pres.append(sibling)
 
-    for node in to_remove:
+        all_samples.extend(
+            SampleCase(input=pres[i].get_text(), output=pres[i + 1].get_text())
+            for i in range(0, len(pres) - 1, 2)
+        )
+        all_to_remove.extend(to_remove)
+
+    for node in all_to_remove:
         node.decompose()
-    return samples
+    return all_samples
 
 
 class CsesParser(BaseParser):

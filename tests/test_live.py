@@ -5,8 +5,8 @@ from cpfetch.cpparse import get_parser
 SITES = [
     pytest.param(
         "cses",
-        "https://cses.fi/problemset/task/1083",
-        "Missing Number",
+        "https://cses.fi/problemset/task/1092",
+        "Two Sets",
         id="cses",
     ),
     pytest.param(

@@ -7,17 +7,68 @@ rendered. These must be stripped to produce clean output.
 Math is rendered via KaTeX with <annotation encoding="application/x-tex"> — the authoritative TeX
 source. The surrounding KaTeX visual markup (aria-hidden spans) must be ignored to avoid
 concatenating visual-rendering text into the math output.
+
+Practice problems have a public JSON API at /api/contests/PRACTICE/problems/<CODE> that provides
+structured sampleTestCases. We replace the Playwright-scraped samples with API data for
+practice problems, since the API is the authoritative source for sample test cases.
 """
 
+import json
 import re
+import urllib.request
 from typing import override
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
-from ...cp_metadata import MathExtractor, SampleCase
+from ...cp_metadata import MathExtractor, ProblemData, SampleCase
 from ..lib import BaseParser
 
 _SAMPLE_HEADING_RE = re.compile(r"sample\s*\d+\s*:?\s*$", re.IGNORECASE)
+
+
+def _extract_codechef_problem_code(url: str) -> str | None:
+    """Extract the problem code from a CodeChef practice URL.
+
+    Returns the uppercase problem identifier (e.g. 'START01' from
+    /problems/START01) or None if the URL is not a practice problem page.
+    Contest problem URLs (/CONTEST/problems/CODE) return None because
+    the practice API does not serve contest-specific problem data.
+    """
+    path = urlparse(url).path.rstrip("/")
+    parts = [p for p in path.split("/") if p]
+    if len(parts) == 2 and parts[0] == "problems":
+        return parts[1]
+    return None
+
+
+def _fetch_codechef_api_samples(problem_code: str) -> list[SampleCase] | None:
+    """Fetch sample test cases from the CodeChef practice problem API.
+
+    Returns a list of SampleCase objects or None if the API is unreachable,
+    returns a non-success status, or the response is malformed. Deleted
+    sample test cases (isDeleted: true) are filtered out.
+    """
+    api_url = f"https://www.codechef.com/api/contests/PRACTICE/problems/{problem_code}"
+    try:
+        with urllib.request.urlopen(api_url, timeout=10) as resp:
+            data: object = json.loads(resp.read())
+    except Exception:
+        return None
+    if not isinstance(data, dict) or data.get("status") != "success":
+        return None
+    test_cases: object = data.get("problemComponents", {}).get("sampleTestCases")
+    if not isinstance(test_cases, list):
+        return None
+    samples: list[SampleCase] = []
+    for tc in test_cases:
+        if not isinstance(tc, dict) or tc.get("isDeleted", False):
+            continue
+        inp: object = tc.get("input")
+        out: object = tc.get("output")
+        if isinstance(inp, str) and isinstance(out, str):
+            samples.append(SampleCase(input=inp, output=out))
+    return samples
 
 
 def _remove_duplicate_title(soup: BeautifulSoup, problem_name: str) -> None:
@@ -90,3 +141,16 @@ class CodeChefParser(BaseParser):
             elif text == "output format":
                 heading.string = "Output"
         return extractor, samples
+
+    @override
+    def parse(self, url: str) -> ProblemData | None:
+        """Fetch and parse a CodeChef problem, enhancing samples via the practice API."""
+        data = super().parse(url)
+        if data is None:
+            return None
+        problem_code = _extract_codechef_problem_code(url)
+        if problem_code is not None:
+            api_samples = _fetch_codechef_api_samples(problem_code)
+            if api_samples:
+                data.samples = api_samples
+        return data

@@ -1,4 +1,7 @@
 import json
+from unittest.mock import patch
+
+from bs4 import BeautifulSoup
 
 from cpfetch.cp_metadata import (
     MathExtractor,
@@ -11,13 +14,20 @@ from cpfetch.cp_metadata import (
     slugify,
 )
 from cpfetch.cpparse.lib import (
+    BaseParser,
     as_code_block,
     classify_section_heading,
     fmt_time,
     render_markdown,
     space_latex_commands,
 )
+from cpfetch.cpparse.platforms.codechef import (
+    CodeChefParser,
+    _extract_codechef_problem_code,
+    _fetch_codechef_api_samples,
+)
 from cpfetch.cpparse.platforms.codeforces import CodeforcesParser
+from cpfetch.cpparse.platforms.cses import _extract_cses_samples
 
 
 class TestSiteFromUrl:
@@ -343,3 +353,269 @@ class TestRenderMarkdownEdgeCases:
         assert "### Example 2" in md
         assert "```\n1\n```" in md
         assert "```\n3\n```" in md
+
+
+_CSES_WRAPPER = '<div class="md">\n{}\n</div>'
+
+
+def _cses_soup(body: str) -> BeautifulSoup:
+    return BeautifulSoup(_CSES_WRAPPER.format(body), "html.parser")
+
+
+class TestExtractCsesSamples:
+    def test_single_example_one_pair(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1>'
+            "<p>Input:</p><pre>3</pre>"
+            "<p>Output:</p><pre>3 10 5 16 8 4 2 1</pre>"
+        )
+        samples = _extract_cses_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "3"
+        assert samples[0].output == "3 10 5 16 8 4 2 1"
+
+    def test_single_example_two_pairs(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1>'
+            "<p>Input:</p><pre>1</pre>"
+            "<p>Output:</p><pre>2</pre>"
+            "<p>Input:</p><pre>3</pre>"
+            "<p>Output:</p><pre>4</pre>"
+        )
+        samples = _extract_cses_samples(soup)
+        assert len(samples) == 2
+        assert samples[0].input == "1"
+        assert samples[0].output == "2"
+        assert samples[1].input == "3"
+        assert samples[1].output == "4"
+
+    def test_numbered_examples(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example1">Example 1</h1>'
+            "<p>Input:</p><pre>7</pre>"
+            "<p>Output:</p><pre>YES</pre>"
+            '<h1 id="example2">Example 2</h1>'
+            "<p>Input:</p><pre>6</pre>"
+            "<p>Output:</p><pre>NO</pre>"
+        )
+        samples = _extract_cses_samples(soup)
+        assert len(samples) == 2
+        assert samples[0].input == "7"
+        assert samples[0].output == "YES"
+        assert samples[1].input == "6"
+        assert samples[1].output == "NO"
+
+    def test_no_example_heading(self) -> None:
+        soup = _cses_soup("<p>No examples here.</p>")
+        assert _extract_cses_samples(soup) == []
+
+    def test_example_without_pres(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1><p>Just some text.</p>'
+        )
+        assert _extract_cses_samples(soup) == []
+
+    def test_odd_number_of_pres(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1>'
+            "<p>Input:</p><pre>1</pre>"
+            "<p>Output:</p><pre>2</pre>"
+            "<p>Input:</p><pre>3</pre>"
+        )
+        samples = _extract_cses_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "1"
+        assert samples[0].output == "2"
+
+    def test_decomposes_example_section(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1>'
+            "<p>Input:</p><pre>3</pre>"
+            "<p>Output:</p><pre>4</pre>"
+            '<h1 id="constraints">Constraints</h1>'
+            "<p>Keep this text.</p>"
+        )
+        _ = _extract_cses_samples(soup)
+        assert soup.find("h1", id="example") is None
+        assert "Keep this text." in soup.get_text()
+
+    def test_decomposes_numbered_examples(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example1">Example 1</h1>'
+            "<p>Input:</p><pre>7</pre>"
+            "<p>Output:</p><pre>YES</pre>"
+            '<h1 id="example2">Example 2</h1>'
+            "<p>Input:</p><pre>6</pre>"
+            "<p>Output:</p><pre>NO</pre>"
+            '<h1 id="constraints">Constraints</h1>'
+            "<p>Trailing text.</p>"
+        )
+        _ = _extract_cses_samples(soup)
+        assert soup.find("h1", id="example1") is None
+        assert soup.find("h1", id="example2") is None
+        assert "Trailing text." in soup.get_text()
+
+    def test_non_example_h1_not_removed(self) -> None:
+        soup = _cses_soup(
+            '<h1 id="example">Example</h1>'
+            "<p>Input:</p><pre>3</pre>"
+            "<p>Output:</p><pre>4</pre>"
+            '<h1 id="constraints">Constraints</h1>'
+            "<ul><li>n &le; 10</li></ul>"
+        )
+        _ = _extract_cses_samples(soup)
+        constraints = soup.find("h1", id="constraints")
+        assert constraints is not None
+        assert "n" in constraints.find_next("ul").get_text()
+
+
+class TestFetchCodechefApiSamples:
+    def _make_response(self, data: dict) -> bytes:
+        return json.dumps(data).encode()
+
+    def test_success(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
+                {
+                    "status": "success",
+                    "problemComponents": {
+                        "sampleTestCases": [
+                            {"id": "1", "input": "123", "output": "123", "isDeleted": False},
+                            {"id": "2", "input": "15", "output": "15", "isDeleted": False},
+                        ]
+                    },
+                }
+            )
+            samples = _fetch_codechef_api_samples("START01")
+        assert samples is not None
+        assert len(samples) == 2
+        assert samples[0].input == "123"
+        assert samples[0].output == "123"
+        assert samples[1].input == "15"
+        assert samples[1].output == "15"
+
+    def test_filters_deleted(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
+                {
+                    "status": "success",
+                    "problemComponents": {
+                        "sampleTestCases": [
+                            {"id": "1", "input": "in1", "output": "out1", "isDeleted": True},
+                            {"id": "2", "input": "in2", "output": "out2", "isDeleted": False},
+                        ]
+                    },
+                }
+            )
+            samples = _fetch_codechef_api_samples("TEST")
+        assert samples is not None
+        assert len(samples) == 1
+        assert samples[0].input == "in2"
+
+    def test_not_success(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
+                {"status": "error"}
+            )
+            assert _fetch_codechef_api_samples("TEST") is None
+
+    def test_network_error(self) -> None:
+        with patch("urllib.request.urlopen", side_effect=OSError("network error")):
+            assert _fetch_codechef_api_samples("TEST") is None
+
+    def test_empty_sample_test_cases(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
+                {
+                    "status": "success",
+                    "problemComponents": {"sampleTestCases": []},
+                }
+            )
+            assert _fetch_codechef_api_samples("TEST") == []
+
+    def test_missing_sample_test_cases(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
+                {"status": "success", "problemComponents": {}}
+            )
+            assert _fetch_codechef_api_samples("TEST") is None
+
+    def test_malformed_json(self) -> None:
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = b"not json"
+            assert _fetch_codechef_api_samples("TEST") is None
+
+
+class TestExtractCodechefProblemCode:
+    def test_practice_problem(self) -> None:
+        assert _extract_codechef_problem_code("https://www.codechef.com/problems/START01") == "START01"
+
+    def test_contest_problem(self) -> None:
+        assert _extract_codechef_problem_code("https://www.codechef.com/START37/problems/MINHEIGHT") is None
+
+    def test_non_problem_url(self) -> None:
+        assert _extract_codechef_problem_code("https://www.codechef.com/") is None
+
+    def test_trailing_slash(self) -> None:
+        assert _extract_codechef_problem_code("https://www.codechef.com/problems/START01/") == "START01"
+
+    def test_blog_url(self) -> None:
+        assert _extract_codechef_problem_code("https://www.codechef.com/blogs/how-to") is None
+
+
+class TestCodeChefParserParse:
+    def _base_data(self) -> ProblemData:
+        return ProblemData(
+            name="Test",
+            site="codechef",
+            platform="CodeChef",
+            url="https://www.codechef.com/problems/TEST",
+            time_limit=1000.0,
+            memory_limit=256,
+            samples=[SampleCase(input="scraped", output="scraped")],
+            body_html="<p>test</p>",
+        )
+
+    def test_api_samples_replace_playwright_samples(self) -> None:
+        parser = CodeChefParser()
+        with (
+            patch.object(BaseParser, "parse", return_value=self._base_data()),
+            patch(
+                "cpfetch.cpparse.platforms.codechef._fetch_codechef_api_samples",
+                return_value=[SampleCase(input="api_in", output="api_out")],
+            ),
+        ):
+            data = parser.parse("https://www.codechef.com/problems/TEST")
+        assert data is not None
+        assert len(data.samples) == 1
+        assert data.samples[0].input == "api_in"
+
+    def test_api_failure_keeps_playwright_samples(self) -> None:
+        parser = CodeChefParser()
+        with (
+            patch.object(BaseParser, "parse", return_value=self._base_data()),
+            patch(
+                "cpfetch.cpparse.platforms.codechef._fetch_codechef_api_samples",
+                return_value=None,
+            ),
+        ):
+            data = parser.parse("https://www.codechef.com/problems/TEST")
+        assert data is not None
+        assert data.samples[0].input == "scraped"
+
+    def test_contest_url_skips_api(self) -> None:
+        parser = CodeChefParser()
+        base = ProblemData(
+            name="Test",
+            site="codechef",
+            platform="CodeChef",
+            url="https://www.codechef.com/START37/problems/TEST",
+            time_limit=1000.0,
+            memory_limit=256,
+            samples=[SampleCase(input="scraped", output="scraped")],
+            body_html="<p>test</p>",
+        )
+        with patch.object(BaseParser, "parse", return_value=base):
+            data = parser.parse("https://www.codechef.com/START37/problems/TEST")
+        assert data is not None
+        assert data.samples[0].input == "scraped"

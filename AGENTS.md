@@ -28,3 +28,4 @@ from Codeforces, AtCoder, CodeChef, and CSES using Playwright.
 ## Rules
 
 - When features or CLI usage change, update README.md accordingly.
+- When fixing a bug, always add a test that checks for regression.
