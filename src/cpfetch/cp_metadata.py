@@ -86,17 +86,26 @@ def restore_math(text: str, math_map: dict[str, str]) -> str:
     return pattern.sub(lambda m: math_map[m.group(0)], text)
 
 
-_META_FILE = ".meta.json"
+_META_FILE = "meta.json"
 
 
-def save_meta_json(directory: Path, url: str) -> None:
-    """Write a .meta.json file tracking which URL was fetched into *directory*."""
+def save_meta_json(directory: Path, data: ProblemData) -> None:
+    """Write a meta.json file with problem metadata into *directory*."""
     meta_path = directory / _META_FILE
-    _ = meta_path.write_text(json.dumps({"url": url}, indent=2) + "\n", encoding="utf-8")
+    payload = {
+        "version": 1,
+        "url": data.url,
+        "name": data.name,
+        "site": data.site,
+        "platform": data.platform,
+        "time_limit": data.time_limit,
+        "memory_limit": data.memory_limit,
+    }
+    _ = meta_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
 def load_meta_url(directory: Path) -> str | None:
-    """Read the URL stored in a .meta.json file under *directory*."""
+    """Read the URL stored in a meta.json file under *directory*."""
     meta_path = directory / _META_FILE
     if not meta_path.exists():
         return None

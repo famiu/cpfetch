@@ -2,7 +2,7 @@
 
 Easily fetch competitive programming problem statements and sample tests, right from your terminal.
 
-For each problem, cpfetch saves a formatted `problem.md` (with LaTeX math restored), a `tests/` directory with numbered `.in`/`.out` sample files, and a `.meta.json` for re-fetching. No browser extension required, everything runs from the command line.
+For each problem, cpfetch saves a formatted `problem.md` (with LaTeX math restored), a `tests/` directory with numbered `.in`/`.out` sample files, and a `meta.json` for re-fetching. No browser extension required, everything runs from the command line.
 
 - **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES
 - **Problem body + samples**: the full problem statement alongside ready-to-use test files
@@ -38,8 +38,27 @@ uv run cpfetch --url https://cses.fi/problemset/task/1083 \
 # Create {site}/{slug} subdirectory under --out-dir
 uv run cpfetch --url https://atcoder.jp/contests/abc233/tasks/abc233_a --out-dir problems --nest
 
-# Batch re-fetch all problems with .meta.json under a directory
+# Batch re-fetch all problems with meta.json under a directory
 uv run cpfetch --all --problems-dir problems
+```
+
+## Output
+
+Each problem directory contains `problem.md`, `tests/` (numbered `.in`/`.out`
+files), and `meta.json`.
+
+`meta.json` stores structured problem metadata:
+
+```json
+{
+  "version": 1,
+  "url": "https://codeforces.com/problemset/problem/4/A",
+  "name": "Watermelon",
+  "site": "codeforces",
+  "platform": "Codeforces",
+  "time_limit": 1000.0,
+  "memory_limit": 256
+}
 ```
 
 ## Test

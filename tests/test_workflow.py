@@ -1,4 +1,4 @@
-from cpfetch.cp_metadata import ProblemData, SampleCase, load_meta_url, save_meta_json
+from cpfetch.cp_metadata import ProblemData, SampleCase
 from cpfetch.cpparse.lib import render_markdown
 from cpfetch.fetch_problem import write_samples
 
@@ -44,13 +44,6 @@ class TestWriteSamples:
         assert not (tests_dir / "02.in").exists()
         assert not (tests_dir / "03.out").exists()
         assert (tests_dir / "notes.txt").exists()
-
-
-class TestSaveMetaJson:
-    def test_writes_meta_json(self, tmp_path):
-        save_meta_json(tmp_path, "https://example.com")
-        assert (tmp_path / ".meta.json").exists()
-        assert load_meta_url(tmp_path) == "https://example.com"
 
 
 class TestRenderMarkdown:

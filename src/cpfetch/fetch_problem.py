@@ -66,7 +66,7 @@ def process_url(url: str, out_dir: Path, nest: bool) -> str | None:
     md_content = render_markdown(data)
     _ = (output_dir / "problem.md").write_text(md_content, encoding="utf-8")
 
-    save_meta_json(output_dir, url)
+    save_meta_json(output_dir, data)
 
     print(f"saved: {output_dir}", file=sys.stderr, flush=True)
     return str(output_dir)
@@ -110,13 +110,13 @@ def main() -> None:
     _ = parser.add_argument(
         "--all",
         action="store_true",
-        help="re-fetch all problems using .meta.json under --problems-dir",
+        help="re-fetch all problems using meta.json under --problems-dir",
     )
     _ = parser.add_argument(
         "--problems-dir",
         type=str,
         default=".",
-        help="directory to walk for .meta.json files (default: current directory)",
+        help="directory to walk for meta.json files (default: current directory)",
     )
     args = parser.parse_args()
 
@@ -134,7 +134,7 @@ def main() -> None:
             print(f"error: problems root not found: {root}", file=sys.stderr)
             sys.exit(1)
         failures = 0
-        meta_paths = sorted(root.glob("**/.meta.json"))
+        meta_paths = sorted(root.glob("**/meta.json"))
         total = len(meta_paths)
         for i, meta_path in enumerate(meta_paths, 1):
             print(
@@ -145,7 +145,7 @@ def main() -> None:
             url = load_meta_url(meta_path.parent)
             if url is None:
                 print(
-                    f"error: invalid .meta.json in {meta_path.parent}",
+                    f"error: invalid meta.json in {meta_path.parent}",
                     file=sys.stderr,
                 )
                 failures += 1

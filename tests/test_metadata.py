@@ -1,3 +1,5 @@
+import json
+
 from cpfetch.cp_metadata import (
     MathExtractor,
     ProblemData,
@@ -90,18 +92,37 @@ class TestRestoreMath:
 
 class TestSaveLoadMetaUrl:
     def test_round_trip(self, tmp_path):
-        save_meta_json(tmp_path, "https://example.com/problem/1")
+        data = ProblemData(
+            name="Watermelon",
+            site="codeforces",
+            platform="Codeforces",
+            url="https://example.com/problem/1",
+            time_limit=1000.0,
+            memory_limit=256,
+            samples=[],
+            body_html="<p>Test</p>",
+        )
+        save_meta_json(tmp_path, data)
         assert load_meta_url(tmp_path) == "https://example.com/problem/1"
+        raw = json.loads((tmp_path / "meta.json").read_text(encoding="utf-8"))
+        assert raw["version"] == 1
+        assert raw["name"] == "Watermelon"
+        assert raw["site"] == "codeforces"
+        assert raw["platform"] == "Codeforces"
+        assert raw["time_limit"] == 1000.0
+        assert raw["memory_limit"] == 256
+        assert "samples" not in raw
+        assert "body_html" not in raw
 
     def test_missing_file(self, tmp_path):
         assert load_meta_url(tmp_path) is None
 
     def test_invalid_json(self, tmp_path):
-        (tmp_path / ".meta.json").write_text("not json")
+        (tmp_path / "meta.json").write_text("not json")
         assert load_meta_url(tmp_path) is None
 
     def test_missing_url_key(self, tmp_path):
-        (tmp_path / ".meta.json").write_text('{"foo": "bar"}')
+        (tmp_path / "meta.json").write_text('{"foo": "bar"}')
         assert load_meta_url(tmp_path) is None
 
 
