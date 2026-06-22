@@ -61,13 +61,6 @@ files), and `meta.json`.
 }
 ```
 
-## Test
-
-```sh
-uv run pytest tests/
-uv run pytest -m integration tests/
-```
-
 ## License
 
 [AGPLv3 or later](LICENSE).
