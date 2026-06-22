@@ -365,9 +365,7 @@ def _cses_soup(body: str) -> BeautifulSoup:
 class TestExtractCsesSamples:
     def test_single_example_one_pair(self) -> None:
         soup = _cses_soup(
-            '<h1 id="example">Example</h1>'
-            "<p>Input:</p><pre>3</pre>"
-            "<p>Output:</p><pre>3 10 5 16 8 4 2 1</pre>"
+            '<h1 id="example">Example</h1><p>Input:</p><pre>3</pre><p>Output:</p><pre>3 10 5 16 8 4 2 1</pre>'
         )
         samples = _extract_cses_samples(soup)
         assert len(samples) == 1
@@ -410,17 +408,12 @@ class TestExtractCsesSamples:
         assert _extract_cses_samples(soup) == []
 
     def test_example_without_pres(self) -> None:
-        soup = _cses_soup(
-            '<h1 id="example">Example</h1><p>Just some text.</p>'
-        )
+        soup = _cses_soup('<h1 id="example">Example</h1><p>Just some text.</p>')
         assert _extract_cses_samples(soup) == []
 
     def test_odd_number_of_pres(self) -> None:
         soup = _cses_soup(
-            '<h1 id="example">Example</h1>'
-            "<p>Input:</p><pre>1</pre>"
-            "<p>Output:</p><pre>2</pre>"
-            "<p>Input:</p><pre>3</pre>"
+            '<h1 id="example">Example</h1><p>Input:</p><pre>1</pre><p>Output:</p><pre>2</pre><p>Input:</p><pre>3</pre>'
         )
         samples = _extract_cses_samples(soup)
         assert len(samples) == 1
@@ -514,9 +507,7 @@ class TestFetchCodechefApiSamples:
 
     def test_not_success(self) -> None:
         with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
-                {"status": "error"}
-            )
+            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response({"status": "error"})
             assert _fetch_codechef_api_samples("TEST") is None
 
     def test_network_error(self) -> None:

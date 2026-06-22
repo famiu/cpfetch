@@ -38,8 +38,7 @@ def _extract_cses_samples(soup: BeautifulSoup) -> list[SampleCase]:
                 pres.append(sibling)
 
         all_samples.extend(
-            SampleCase(input=pres[i].get_text(), output=pres[i + 1].get_text())
-            for i in range(0, len(pres) - 1, 2)
+            SampleCase(input=pres[i].get_text(), output=pres[i + 1].get_text()) for i in range(0, len(pres) - 1, 2)
         )
         all_to_remove.extend(to_remove)
 
