@@ -13,15 +13,14 @@ structured sampleTestCases. We replace the Patchright-scraped samples with API d
 practice problems, since the API is the authoritative source for sample test cases.
 """
 
-import json
 import re
-import urllib.request
 from typing import override
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
 from ...cp_metadata import MathSentinelRegistry, ProblemData, SampleCase, parse_memory_limit, parse_time_limit
+from ..fetch import BrowserFetch
 from ..lib import BaseParser
 
 _SAMPLE_HEADING_RE = re.compile(r"sample\s*\d+\s*:?\s*$", re.IGNORECASE)
@@ -42,7 +41,7 @@ def _extract_codechef_problem_code(url: str) -> str | None:
     return None
 
 
-def _fetch_codechef_api_samples(problem_code: str) -> list[SampleCase] | None:
+def _fetch_codechef_api_samples(problem_code: str, fetcher: BrowserFetch) -> list[SampleCase] | None:
     """Fetch sample test cases from the CodeChef practice problem API.
 
     Returns a list of SampleCase objects or None if the API is unreachable,
@@ -50,16 +49,15 @@ def _fetch_codechef_api_samples(problem_code: str) -> list[SampleCase] | None:
     sample test cases (isDeleted: true) are filtered out.
     """
     api_url = f"https://www.codechef.com/api/contests/PRACTICE/problems/{problem_code}"
-    try:
-        with urllib.request.urlopen(api_url, timeout=10) as resp:
-            data = json.loads(resp.read())
-    except Exception:
-        return None
+    data = fetcher.request_get(api_url)
     if not isinstance(data, dict):
         return None
     if data.get("status") != "success":
         return None
-    test_cases = data.get("problemComponents", {}).get("sampleTestCases")
+    components = data.get("problemComponents")
+    if not isinstance(components, dict):
+        return None
+    test_cases = components.get("sampleTestCases")
     if not isinstance(test_cases, list):
         return None
     samples: list[SampleCase] = []
@@ -130,8 +128,12 @@ class CodeChefParser(BaseParser):
         return time_limit, memory_limit
 
     @override
+    def extract_samples(self, soup: BeautifulSoup) -> list[SampleCase]:
+        return _extract_codechef_samples(soup)
+
+    @override
     def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
-        samples = _extract_codechef_samples(soup)
+        samples = self.extract_samples(soup)
 
         extractor = self.extract_math(soup)
         _remove_duplicate_title(soup, name or "")
@@ -151,8 +153,9 @@ class CodeChefParser(BaseParser):
         if data is None:
             return None
         problem_code = _extract_codechef_problem_code(url)
-        if problem_code is not None:
-            api_samples = _fetch_codechef_api_samples(problem_code)
-            if api_samples:
-                data.samples = api_samples
+        if problem_code is not None:  # noqa: SIM102 — enrichment always desired; fetcher is just the transport
+            if self._fetcher is not None:
+                api_samples = _fetch_codechef_api_samples(problem_code, self._fetcher)
+                if api_samples is not None:
+                    data.samples = api_samples
         return data

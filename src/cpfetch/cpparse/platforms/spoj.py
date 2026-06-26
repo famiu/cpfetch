@@ -108,8 +108,12 @@ class SpojParser(BaseParser):
         return time_limit, memory_limit
 
     @override
+    def extract_samples(self, soup: BeautifulSoup) -> list[SampleCase]:
+        return _extract_spoj_samples(soup)
+
+    @override
     def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
-        samples = _extract_spoj_samples(soup)
+        samples = self.extract_samples(soup)
 
         for heading in list(soup.select("#problem-body h3")):
             if heading.get_text(strip=True).lower() == "information":

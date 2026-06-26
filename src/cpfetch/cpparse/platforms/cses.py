@@ -85,6 +85,10 @@ class CsesParser(BaseParser):
         return time_limit, memory_limit
 
     @override
+    def extract_samples(self, soup: BeautifulSoup) -> list[SampleCase]:
+        return _extract_cses_samples(soup)
+
+    @override
     def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
-        samples = _extract_cses_samples(soup)
+        samples = self.extract_samples(soup)
         return extract_math_nodes(soup), samples

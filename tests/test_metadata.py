@@ -617,23 +617,24 @@ class TestSpojLimits:
 
 
 class TestFetchCodechefApiSamples:
-    def _make_response(self, data: dict) -> bytes:
-        return json.dumps(data).encode()
+    def _make_fetcher(self, response_data: dict | None) -> MagicMock:
+        fetcher = MagicMock()
+        fetcher.request_get.return_value = response_data
+        return fetcher
 
     def test_success(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
-                {
-                    "status": "success",
-                    "problemComponents": {
-                        "sampleTestCases": [
-                            {"id": "1", "input": "123", "output": "123", "isDeleted": False},
-                            {"id": "2", "input": "15", "output": "15", "isDeleted": False},
-                        ]
-                    },
-                }
-            )
-            samples = _fetch_codechef_api_samples("START01")
+        fetcher = self._make_fetcher(
+            {
+                "status": "success",
+                "problemComponents": {
+                    "sampleTestCases": [
+                        {"id": "1", "input": "123", "output": "123", "isDeleted": False},
+                        {"id": "2", "input": "15", "output": "15", "isDeleted": False},
+                    ]
+                },
+            }
+        )
+        samples = _fetch_codechef_api_samples("START01", fetcher)
         assert samples is not None
         assert len(samples) == 2
         assert samples[0].input == "123"
@@ -642,53 +643,48 @@ class TestFetchCodechefApiSamples:
         assert samples[1].output == "15"
 
     def test_filters_deleted(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
-                {
-                    "status": "success",
-                    "problemComponents": {
-                        "sampleTestCases": [
-                            {"id": "1", "input": "in1", "output": "out1", "isDeleted": True},
-                            {"id": "2", "input": "in2", "output": "out2", "isDeleted": False},
-                        ]
-                    },
-                }
-            )
-            samples = _fetch_codechef_api_samples("TEST")
+        fetcher = self._make_fetcher(
+            {
+                "status": "success",
+                "problemComponents": {
+                    "sampleTestCases": [
+                        {"id": "1", "input": "in1", "output": "out1", "isDeleted": True},
+                        {"id": "2", "input": "in2", "output": "out2", "isDeleted": False},
+                    ]
+                },
+            }
+        )
+        samples = _fetch_codechef_api_samples("TEST", fetcher)
         assert samples is not None
         assert len(samples) == 1
         assert samples[0].input == "in2"
 
     def test_not_success(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response({"status": "error"})
-            assert _fetch_codechef_api_samples("TEST") is None
+        fetcher = self._make_fetcher({"status": "error"})
+        assert _fetch_codechef_api_samples("TEST", fetcher) is None
 
     def test_network_error(self) -> None:
-        with patch("urllib.request.urlopen", side_effect=OSError("network error")):
-            assert _fetch_codechef_api_samples("TEST") is None
+        fetcher = MagicMock()
+        fetcher.request_get.return_value = None
+        assert _fetch_codechef_api_samples("TEST", fetcher) is None
 
     def test_empty_sample_test_cases(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
-                {
-                    "status": "success",
-                    "problemComponents": {"sampleTestCases": []},
-                }
-            )
-            assert _fetch_codechef_api_samples("TEST") == []
+        fetcher = self._make_fetcher(
+            {
+                "status": "success",
+                "problemComponents": {"sampleTestCases": []},
+            }
+        )
+        assert _fetch_codechef_api_samples("TEST", fetcher) == []
 
     def test_missing_sample_test_cases(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = self._make_response(
-                {"status": "success", "problemComponents": {}}
-            )
-            assert _fetch_codechef_api_samples("TEST") is None
+        fetcher = self._make_fetcher({"status": "success", "problemComponents": {}})
+        assert _fetch_codechef_api_samples("TEST", fetcher) is None
 
     def test_malformed_json(self) -> None:
-        with patch("urllib.request.urlopen") as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = b"not json"
-            assert _fetch_codechef_api_samples("TEST") is None
+        fetcher = MagicMock()
+        fetcher.request_get.return_value = None
+        assert _fetch_codechef_api_samples("TEST", fetcher) is None
 
 
 class TestExtractCodechefProblemCode:
@@ -722,7 +718,8 @@ class TestCodeChefParserParse:
         )
 
     def test_api_samples_replace_playwright_samples(self) -> None:
-        parser = CodeChefParser()
+        fetcher = MagicMock()
+        parser = CodeChefParser(fetcher)
         with (
             patch.object(BaseParser, "parse", return_value=self._base_data()),
             patch(
@@ -736,7 +733,8 @@ class TestCodeChefParserParse:
         assert data.samples[0].input == "api_in"
 
     def test_api_failure_keeps_playwright_samples(self) -> None:
-        parser = CodeChefParser()
+        fetcher = MagicMock()
+        parser = CodeChefParser(fetcher)
         with (
             patch.object(BaseParser, "parse", return_value=self._base_data()),
             patch(
@@ -749,7 +747,8 @@ class TestCodeChefParserParse:
         assert data.samples[0].input == "scraped"
 
     def test_contest_url_skips_api(self) -> None:
-        parser = CodeChefParser()
+        fetcher = MagicMock()
+        parser = CodeChefParser(fetcher)
         base = ProblemData(
             name="Test",
             site="codechef",

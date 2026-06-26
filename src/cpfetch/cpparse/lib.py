@@ -172,9 +172,13 @@ class BaseParser:
         """Find math nodes in *soup* and replace them with sentinel keys."""
         return extract_math_nodes(soup)
 
+    def extract_samples(self, soup: BeautifulSoup) -> list[SampleCase]:
+        """Harvest sample test cases from *soup*. Subclasses override."""
+        return []
+
     def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         """Clean up *soup* and return its math extractor and sample cases. Subclasses override."""
-        return self.extract_math(soup), []
+        return self.extract_math(soup), self.extract_samples(soup)
 
     def extract_data(self, html: str, url: str) -> ProblemData | None:
         """Parse full-page HTML into a ProblemData without fetching."""

@@ -203,6 +203,24 @@ class BrowserFetch:
             _log.error("fetch failed for %s: %s", url, exc)
             return None
 
+    def request_get(self, url: str) -> object | None:
+        """Fetch JSON from *url* via the browser context's request API.
+
+        Returns the parsed JSON value, or None if the request fails or the
+        response is not valid JSON. The caller is responsible for validating
+        the shape of the returned value.
+        """
+        try:
+            _, ctx = self._ensure_headless()
+            response = ctx.request.get(url, timeout=10_000)
+            if not response.ok:
+                _log.warning("API request to %s returned status %d", url, response.status)
+                return None
+            return response.json()
+        except Exception as exc:
+            _log.warning("API request to %s failed: %s", url, exc)
+            return None
+
     def close(self) -> None:
         """Close the cached context and browser and stop the driver if running."""
         if self._context is not None:

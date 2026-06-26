@@ -89,7 +89,7 @@ def _pre_text(pre: Tag) -> str:
     return pre.get_text(separator="\n").strip()
 
 
-def _extract_cf_samples(soup: BeautifulSoup) -> list[SampleCase]:
+def _extract_codeforces_samples(soup: BeautifulSoup) -> list[SampleCase]:
     samples: list[SampleCase] = []
     for test in soup.select(".sample-tests .sample-test"):
         inp = test.select_one(".input pre")
@@ -156,8 +156,12 @@ class CodeforcesParser(BaseParser):
         return extractor
 
     @override
+    def extract_samples(self, soup: BeautifulSoup) -> list[SampleCase]:
+        return _extract_codeforces_samples(soup)
+
+    @override
     def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
-        samples = _extract_cf_samples(soup)
+        samples = self.extract_samples(soup)
 
         header = soup.select_one(".problem-statement > .header")
         if header is not None:
