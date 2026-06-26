@@ -1,4 +1,5 @@
 import json
+import typing
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -371,6 +372,51 @@ class TestRenderMarkdownEdgeCases:
         assert "### Example 2" in md
         assert "```\n1\n```" in md
         assert "```\n3\n```" in md
+
+
+class TestPostNormalize:
+    """Verify that post_normalize runs after heading normalization and trailing strip."""
+
+    def test_post_normalize_runs_after_heading_normalization(self) -> None:
+        class TrackingParser(BaseParser):
+            selector = "div"
+            _strip_trailing = False
+            call_order: typing.ClassVar[list[str]] = []
+
+            def extract_name(self, soup: BeautifulSoup) -> str | None:
+                return "Test"
+
+            def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+                self.call_order.append("normalize")
+                return MathSentinelRegistry(), []
+
+            def post_normalize(self, soup: BeautifulSoup, name: str) -> None:
+                self.call_order.append("post_normalize")
+
+        parser = TrackingParser()
+        html = "<div><h3>Input</h3><p>data</p></div>"
+        _ = parser.extract_data(html, "https://example.com/test")
+        assert parser.call_order == ["normalize", "post_normalize"]
+
+    def test_post_normalize_receives_name(self) -> None:
+        received_name: list[str] = []
+
+        class NameCheckerParser(BaseParser):
+            selector = "div"
+            _strip_trailing = False
+
+            def extract_name(self, soup: BeautifulSoup) -> str | None:
+                return "My Problem"
+
+            def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+                return MathSentinelRegistry(), []
+
+            def post_normalize(self, soup: BeautifulSoup, name: str) -> None:
+                received_name.append(name)
+
+        parser = NameCheckerParser()
+        _ = parser.extract_data("<div><p>data</p></div>", "https://example.com/test")
+        assert received_name == ["My Problem"]
 
 
 _CSES_WRAPPER = '<div class="md">\n{}\n</div>'

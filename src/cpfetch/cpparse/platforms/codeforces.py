@@ -160,7 +160,7 @@ class CodeforcesParser(BaseParser):
         return _extract_codeforces_samples(soup)
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = self.extract_samples(soup)
 
         header = soup.select_one(".problem-statement > .header")

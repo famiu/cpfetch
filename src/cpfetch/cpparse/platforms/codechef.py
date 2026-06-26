@@ -132,11 +132,10 @@ class CodeChefParser(BaseParser):
         return _extract_codechef_samples(soup)
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = self.extract_samples(soup)
 
         extractor = self.extract_math(soup)
-        _remove_duplicate_title(soup, name or "")
 
         for heading in list(soup.find_all(["h1", "h2", "h3", "h4"])):
             text = heading.get_text(strip=True).lower().rstrip(":")
@@ -145,6 +144,10 @@ class CodeChefParser(BaseParser):
             elif text == "output format":
                 heading.string = "Output"
         return extractor, samples
+
+    @override
+    def post_normalize(self, soup: BeautifulSoup, name: str) -> None:
+        _remove_duplicate_title(soup, name)
 
     @override
     def parse(self, url: str) -> ProblemData | None:

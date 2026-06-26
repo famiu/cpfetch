@@ -112,7 +112,7 @@ class SpojParser(BaseParser):
         return _extract_spoj_samples(soup)
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = self.extract_samples(soup)
 
         for heading in list(soup.select("#problem-body h3")):

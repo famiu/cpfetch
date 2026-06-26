@@ -111,8 +111,16 @@ class BaseParser:
       - extract_name: extract problem title from full-page soup.
       - extract_limits: extract time/memory limits from full-page soup.
       - normalize: process the body element soup (harvest samples, strip boilerplate, extract math).
+      - post_normalize: final cleanup pass after heading normalization and trailing-separator strip.
+        Runs with access to the problem *name* (e.g. to remove duplicate titles). Default is a no-op.
       - _strip_trailing: whether to strip trailing <hr> and empty containers after normalization.
         Set to False in subclasses that handle boilerplate stripping themselves.
+
+    Pipeline order within extract_data:
+      1. normalize(soup)           — platform-specific cleanup + sample/math extraction
+      2. _normalize_section_headings — generic heading-level normalization
+      3. _strip_trailing_separators — remove trailing <hr>/empty containers (if _strip_trailing)
+      4. post_normalize(soup, name) — final pass with name context (e.g. duplicate title removal)
     """
 
     site: str = ""
@@ -176,9 +184,16 @@ class BaseParser:
         """Harvest sample test cases from *soup*. Subclasses override."""
         return []
 
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         """Clean up *soup* and return its math extractor and sample cases. Subclasses override."""
         return self.extract_math(soup), self.extract_samples(soup)
+
+    def post_normalize(self, soup: BeautifulSoup, name: str) -> None:
+        """Final cleanup pass after heading normalization and trailing-separator strip.
+
+        Override in subclasses that need the problem *name* for post-processing
+        (e.g. removing a duplicate title from the body). Default is a no-op.
+        """
 
     def extract_data(self, html: str, url: str) -> ProblemData | None:
         """Parse full-page HTML into a ProblemData without fetching."""
@@ -192,10 +207,11 @@ class BaseParser:
 
         body_soup = BeautifulSoup("", "html.parser")
         _ = body_soup.append(body_elem)  # reparents — full_soup no longer owns body_elem
-        extractor, samples = self.normalize(body_soup, name)
+        extractor, samples = self.normalize(body_soup)
         _normalize_section_headings(body_soup)
         if self._strip_trailing:
             self._strip_trailing_separators(body_soup)
+        self.post_normalize(body_soup, name)
 
         return ProblemData(
             name=name,
