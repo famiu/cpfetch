@@ -13,7 +13,7 @@ from bs4.element import NavigableString, Tag
 from markdownify import markdownify
 
 from ..cp_metadata import MathExtractor, ProblemData, SampleCase, restore_math
-from .fetch import playwright_fetch
+from .fetch import browser_fetch
 
 
 def space_latex_commands(text: str) -> str:
@@ -111,6 +111,7 @@ class BaseParser:
     site: str = ""
     platform: str = ""
     selector: str = ""
+    headless: bool = True
     _strip_trailing: bool = True
 
     _TIME_MS_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(ms|milliseconds?)\b", re.IGNORECASE)
@@ -179,8 +180,8 @@ class BaseParser:
         return segments[-1] if segments else None
 
     def fetch_page(self, url: str) -> str | None:
-        """Fetch the problem page HTML via Playwright and return it."""
-        return playwright_fetch.fetch(url, self.selector)
+        """Fetch the problem page HTML via the browser and return it."""
+        return browser_fetch.fetch(url, self.selector, headless=self.headless)
 
     def extract_name(self, soup: BeautifulSoup) -> str | None:
         """Extract the problem title from the full-page soup. Subclasses override."""

@@ -1,6 +1,7 @@
 from cpfetch.cp_metadata import ProblemData, SampleCase
 from cpfetch.cpparse.lib import render_markdown
 from cpfetch.fetch_problem import write_samples
+from tests.conftest import _scrub_html
 
 
 class TestWriteSamples:
@@ -68,3 +69,17 @@ class TestRenderMarkdown:
         assert "```\n1 2\n3 4\n```" in md
         assert "```\n3\n7\n```" in md
         assert "XX-MATH-" not in md
+
+
+class TestScrubHtml:
+    def test_removes_comment_table(self) -> None:
+        html = """<html><body>
+<p>keep this</p>
+<table id="comments_table">
+<tr><td class="comm comm_odd">user: azizshahid9080</td></tr>
+</table>
+</body></html>"""
+        result = _scrub_html(html)
+        assert "comments_table" not in result
+        assert "azizshahid9080" not in result
+        assert "keep this" in result
