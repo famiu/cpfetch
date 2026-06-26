@@ -15,19 +15,12 @@ snapshots with:
 """
 
 import json
-import re
 
 import pytest
 
 from cpfetch.cpparse import get_parser
 from tests.testutils.fixture_data import FIXTURE_ENTRIES, FIXTURES_DIR
-
-_SENTINEL_RE = re.compile(r"XX-MATH-(\d+)-[a-f0-9]+-XX")
-
-
-def _normalize_sentinels(html: str) -> str:
-    """Strip the per-instance uuid token from sentinel keys for stable comparison."""
-    return _SENTINEL_RE.sub(r"XX-MATH-\1-XX", html)
+from tests.testutils.regenerate import normalize_sentinels
 
 
 @pytest.mark.parametrize(("site", "url", "slug"), FIXTURE_ENTRIES)
@@ -47,11 +40,12 @@ def test_fixture_parse(site: str, url: str, slug: str) -> None:
     assert data.url == expected["url"]
     assert data.time_limit == expected["time_limit"]
     assert data.memory_limit == expected["memory_limit"]
-    assert _normalize_sentinels(data.body_html) == _normalize_sentinels(expected["body_html"])
+    assert normalize_sentinels(data.body_html) == normalize_sentinels(expected["body_html"])
 
     assert len(data.samples) == len(expected["samples"])
     for i, (a, e) in enumerate(zip(data.samples, expected["samples"], strict=True)):
         assert a.input == e["input"], f"sample[{i}] input differs"
         assert a.output == e["output"], f"sample[{i}] output differs"
 
-    assert set(data.math.values()) == set(expected["math_values"])
+    normalized_math = {normalize_sentinels(k): v for k, v in data.math.items()}
+    assert normalized_math == expected["math"]

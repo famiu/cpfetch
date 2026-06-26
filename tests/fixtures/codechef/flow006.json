@@ -5,15 +5,15 @@
   "url": "https://www.codechef.com/problems/FLOW006",
   "time_limit": 1000.0,
   "memory_limit": 1536,
-  "body_html": "<div class=\"_problemBody_bh3c4_71 _dark_bh3c4_66 print\" id=\"problem-statement\">\n<div class=\"_problemStatementWrapper_bh3c4_33\">\n<div class=\"_problemBodyContent_bh3c4_71\">\n\n<p>\n                   You're given an integer\n                   <b>\n                    N\n                   </b>\n                   . Write a program to calculate the sum of all the digits of\n                   <b>\n                    N\n                   </b>\n                   .\n                  </p>\n<div class=\"notranslate\">\n<h2>Input</h2>\n<p>\n                    The first line contains an integer\n                    <b>\n                     T\n                    </b>\n                    , the total number of testcases. Then follow\n                    <b>\n                     T\n                    </b>\n                    lines, each line contains an integer\n                    <b>\n                     N\n                    </b>\n                    .\n                   </p>\n</div>\n<div class=\"notranslate\">\n<h2>Output</h2>\n<p>\n                    For each test case, calculate the sum of digits of\n                    <b>\n                     N\n                    </b>\n                    , and display it in a new line.\n                   </p>\n</div>\n<h2 class=\"notranslate\">\n                   Constraints\n                  </h2>\n<div class=\"_html_code__block_bh3c4_219 notranslate\">\n<ul>\n<li>\nXX-MATH-0-XX\n</li>\n<li>\nXX-MATH-1-XX\n</li>\n</ul>\n</div>\n\n\n<div>\n</div>\n</div>\n</div></div>",
+  "body_html": "<div class=\"_problemBody_bh3c4_71 _dark_bh3c4_66 print\" id=\"problem-statement\">\n<div class=\"_problemStatementWrapper_bh3c4_33\">\n<div class=\"_problemBodyContent_bh3c4_71\">\n\n<p>\n                   You're given an integer\n                   <b>\n                    N\n                   </b>\n                   . Write a program to calculate the sum of all the digits of\n                   <b>\n                    N\n                   </b>\n                   .\n                  </p>\n<div class=\"notranslate\">\n<h2>Input</h2>\n<p>\n                    The first line contains an integer\n                    <b>\n                     T\n                    </b>\n                    , the total number of testcases. Then follow\n                    <b>\n                     T\n                    </b>\n                    lines, each line contains an integer\n                    <b>\n                     N\n                    </b>\n                    .\n                   </p>\n</div>\n<div class=\"notranslate\">\n<h2>Output</h2>\n<p>\n                    For each test case, calculate the sum of digits of\n                    <b>\n                     N\n                    </b>\n                    , and display it in a new line.\n                   </p>\n</div>\n<h2 class=\"notranslate\">\n                   Constraints\n                  </h2>\n<div class=\"_html_code__block_bh3c4_219 notranslate\">\n<ul>\n<li>\nXX-MATH-0-0eb39a5f-XX\n</li>\n<li>\nXX-MATH-1-0eb39a5f-XX\n</li>\n</ul>\n</div>\n\n\n<div>\n</div>\n</div>\n</div></div>",
   "samples": [
     {
       "input": "3 \n12345\n31203\n2123\n",
       "output": "15\n9\n8\n"
     }
   ],
-  "math_values": [
-    "$1 \\leq{} T \\leq{} 1000$",
-    "$1 \\leq{} N \\leq{} 1000000$"
-  ]
+  "math": {
+    "XX-MATH-0-XX": "$1 \\leq{} T \\leq{} 1000$",
+    "XX-MATH-1-XX": "$1 \\leq{} N \\leq{} 1000000$"
+  }
 }

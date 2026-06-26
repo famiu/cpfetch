@@ -5,7 +5,7 @@
   "url": "https://cses.fi/problemset/task/1092",
   "time_limit": 1000.0,
   "memory_limit": 512,
-  "body_html": "<div class=\"md\">\n<p>\n       Your task is to divide the numbers\n       XX-MATH-0-XX\n       into two sets of equal sum.\n      </p>\n<h2 id=\"input\">\n       Input\n      </h2>\n<p>\n       The only input line contains an integer\n       XX-MATH-1-XX\n       .\n      </p>\n<h2 id=\"output\">\n       Output\n      </h2>\n<p>\n       Print \"YES\", if the division is possible, and \"NO\" otherwise.\n      </p>\n<p>\n       After this, if the division is possible, print an example of how to create the sets. First, print the number of elements in the first set followed by the elements themselves in a separate line, and then, print the second set in a similar way.\n      </p>\n<h2 id=\"constraints\">\n       Constraints\n      </h2>\n<ul>\n<li>\nXX-MATH-2-XX\n</li>\n</ul>\n\n\n\n\n\n\n\n\n\n\n</div>",
+  "body_html": "<div class=\"md\">\n<p>\n       Your task is to divide the numbers\n       XX-MATH-0-59272f86-XX\n       into two sets of equal sum.\n      </p>\n<h2 id=\"input\">\n       Input\n      </h2>\n<p>\n       The only input line contains an integer\n       XX-MATH-1-59272f86-XX\n       .\n      </p>\n<h2 id=\"output\">\n       Output\n      </h2>\n<p>\n       Print \"YES\", if the division is possible, and \"NO\" otherwise.\n      </p>\n<p>\n       After this, if the division is possible, print an example of how to create the sets. First, print the number of elements in the first set followed by the elements themselves in a separate line, and then, print the second set in a similar way.\n      </p>\n<h2 id=\"constraints\">\n       Constraints\n      </h2>\n<ul>\n<li>\nXX-MATH-2-59272f86-XX\n</li>\n</ul>\n\n\n\n\n\n\n\n\n\n\n</div>",
   "samples": [
     {
       "input": "7\n",
@@ -16,9 +16,9 @@
       "output": "NO\n"
     }
   ],
-  "math_values": [
-    "$1,2,\\ldots,n$",
-    "$n$",
-    "$1 \\le{} n \\le{} 10^6$"
-  ]
+  "math": {
+    "XX-MATH-0-XX": "$1,2,\\ldots,n$",
+    "XX-MATH-1-XX": "$n$",
+    "XX-MATH-2-XX": "$1 \\le{} n \\le{} 10^6$"
+  }
 }
