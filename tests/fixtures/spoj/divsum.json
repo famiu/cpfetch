@@ -1,0 +1,16 @@
+{
+  "name": "DIVSUM - Divisor Summation",
+  "site": "spoj",
+  "platform": "SPOJ",
+  "url": "https://www.spoj.com/problems/DIVSUM/",
+  "time_limit": 3000.0,
+  "memory_limit": 1536,
+  "body_html": "<div id=\"problem-body\">\n<p>\n         Given a natural number n (1 ≤ n ≤ 500000), please output the summation of all its proper divisors.\n        </p>\n<p>\n<em>\n          Definition:\n         </em>\n         A proper divisor of a natural number is the divisor that is strictly less than the number.\n        </p>\n<p>\n         e.g. number 20 has 5 proper divisors: 1, 2, 4, 5, 10, and the divisor summation is: 1 + 2 + 4 + 5 + 10 = 22.\n        </p>\n<h2>\n         Input\n        </h2>\n<p>\n         An integer stating the number of test cases (equal to about 200000), and that many lines follow, each containing one integer between 1 and 500000 inclusive.\n        </p>\n<h2>\n         Output\n        </h2>\n<p>\n         One integer each line: the divisor summation of the integer given respectively.\n        </p>\n\n\n<p>\n<strong>\n          Warning: large Input/Output data, be careful with certain languages\n         </strong>\n</p></div>",
+  "samples": [
+    {
+      "input": "3\n2\n10\n20",
+      "output": "1\n8\n22"
+    }
+  ],
+  "math_values": []
+}

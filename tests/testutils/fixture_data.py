@@ -7,4 +7,5 @@ FIXTURE_ENTRIES = [
     ("codeforces", "https://codeforces.com/problemset/problem/1/A", "1a"),
     ("codechef", "https://www.codechef.com/problems/FLOW006", "flow006"),
     ("spoj", "https://www.spoj.com/problems/FCTRL/", "fctrl"),
+    ("spoj", "https://www.spoj.com/problems/DIVSUM/", "divsum"),
 ]
