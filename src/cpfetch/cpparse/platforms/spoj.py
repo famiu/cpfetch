@@ -6,10 +6,12 @@ body lives in #problem-body, the title in h2#problem-name, and time/memory
 limits in table#problem-meta.
 
 Samples are embedded in a single <pre> under an <h3>Example</h3> heading,
-labeled with <b>Input:</b> / <b>Output:</b> (or <strong>). The trailing
-<h3>Information</h3> section (forum/cross-reference notes) is stripped.
+labeled with <b>Input:</b> / <b>Output:</b> (or <strong>), or as plain text
+("Sample Input:" / "Sample Output:"). The trailing <h3>Information</h3>
+section (forum/cross-reference notes) is stripped.
 """
 
+import re
 from typing import override
 
 from bs4 import BeautifulSoup
@@ -50,9 +52,23 @@ def _extract_spoj_samples(soup: BeautifulSoup) -> list[SampleCase]:
                 current_label = label if label in ("input", "output") else None
             elif current_label is not None:
                 sections[current_label] = sections.get(current_label, "") + str(child)
+        if "input" not in sections or "output" not in sections:
+            lines = pre.get_text().split("\n")
+            input_start = None
+            output_start = None
+            for i, line in enumerate(lines):
+                stripped = line.strip()
+                if re.search(r"^Sample\s+Input\s*:?\s*$", stripped, re.IGNORECASE):
+                    input_start = i + 1
+                elif input_start is not None and re.search(r"^Sample\s+Output\s*:?\s*$", stripped, re.IGNORECASE):
+                    output_start = i + 1
+                    break
+            if input_start is not None and output_start is not None:
+                sections["input"] = "\n".join(lines[input_start : output_start - 1]).strip()
+                sections["output"] = "\n".join(lines[output_start:]).strip()
         if "input" in sections and "output" in sections:
             samples.append(SampleCase(input=sections["input"].strip(), output=sections["output"].strip()))
-        to_remove.extend((heading, pre))
+            to_remove.extend((heading, pre))
 
     for node in to_remove:
         node.decompose()

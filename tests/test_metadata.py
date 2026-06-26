@@ -525,6 +525,34 @@ class TestExtractSpojSamples:
         assert soup.find("pre") is None
         assert soup.find("h3", string="Example") is None
 
+    def test_plain_text_labels(self) -> None:
+        soup = _spoj_soup("<h3>Example</h3><pre>Sample Input:\n3\n2\n10\n20\n\nSample Output:\n1\n8\n22</pre>")
+        samples = _extract_spoj_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "3\n2\n10\n20"
+        assert samples[0].output == "1\n8\n22"
+        assert soup.find("pre") is None
+        assert soup.find("h3", string="Example") is None
+
+    def test_data_line_contains_output_label(self) -> None:
+        """Regression: 'Output:' as a data line in input is not mistaken for the output separator."""
+        soup = _spoj_soup("<h3>Example</h3><pre>Sample Input:\n3\n2\n10\nOutput:\n20\n\nSample Output:\n1\n8\n22</pre>")
+        samples = _extract_spoj_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "3\n2\n10\nOutput:\n20"
+        assert samples[0].output == "1\n8\n22"
+        assert soup.find("pre") is None
+        assert soup.find("h3", string="Example") is None
+
+    def test_incomplete_plain_text_labels_preserves_body(self) -> None:
+        """Regression: only Sample Input: without Sample Output: leaves the
+        Example heading and <pre> intact (not decomposed) in body_html."""
+        soup = _spoj_soup("<h3>Example</h3><pre>Sample Input:\n1\n2\n3\n</pre>")
+        samples = _extract_spoj_samples(soup)
+        assert samples == []
+        assert soup.find("pre") is not None
+        assert soup.find("h3", string="Example") is not None
+
 
 _SPOJ_FULL_WRAPPER = (
     '<div id="content" class="container">'
