@@ -1,0 +1,22 @@
+{
+  "name": "A. Theatre Square",
+  "site": "codeforces",
+  "platform": "Codeforces",
+  "url": "https://codeforces.com/problemset/problem/1/A",
+  "time_limit": 1000.0,
+  "memory_limit": 256,
+  "body_html": "<div class=\"problem-statement\">\n\n<div>\n<p>\n          Theatre Square in the capital city of Berland has a rectangular shape with the size\n          XX-MATH-0-XX\n          meters. On the occasion of the city's anniversary, a decision was taken to pave the Square with square granite flagstones. Each flagstone is of the size\n          XX-MATH-1-XX\n          .\n         </p>\n<p>\n          What is the least number of flagstones needed to pave the Square? It's allowed to cover the surface larger than the Theatre Square, but the Square has to be covered. It's not allowed to break the flagstones. The sides of flagstones should be parallel to the sides of the Square.\n         </p>\n</div>\n<div class=\"input-specification\">\n<h2>\n          Input\n         </h2>\n<p>\n          The input contains three positive integer numbers in the first line:\n          XX-MATH-2-XX\n          and\n          XX-MATH-3-XX\n          (\n          XX-MATH-4-XX\n          ).\n         </p>\n</div>\n<div class=\"output-specification\">\n<h2>\n          Output\n         </h2>\n<p>\n          Write the needed number of flagstones.\n         </p>\n</div>\n\n</div>",
+  "samples": [
+    {
+      "input": "6 6 4",
+      "output": "4"
+    }
+  ],
+  "math_values": [
+    "$n\n           \n           ×\n           \n            m$",
+    "$a\n           \n           ×\n           \n            a$",
+    "$n\n           \n           ,\n           \n            m$",
+    "$a$",
+    "$1 ≤\n           \n            n\n           \n           ,\n           \n            m\n           \n           ,\n           \n            a\n           \n           ≤ 10\n           \n            9$"
+  ]
+}

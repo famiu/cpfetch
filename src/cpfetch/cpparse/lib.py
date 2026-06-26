@@ -198,11 +198,8 @@ class BaseParser:
         """Clean up *soup* and return its math extractor and sample cases. Subclasses override."""
         return self.extract_math(soup), []
 
-    def _extract_data(self, html: str, url: str) -> ProblemData | None:
-        """Parse full-page HTML into a ProblemData without fetching.
-
-        Separated from parse() for testability — accepts pre-fetched HTML.
-        """
+    def extract_data(self, html: str, url: str) -> ProblemData | None:
+        """Parse full-page HTML into a ProblemData without fetching."""
         full_soup = BeautifulSoup(html, "html.parser")
         body_elem = full_soup.select_one(self.selector)
         if body_elem is None:
@@ -240,7 +237,7 @@ class BaseParser:
         html = self.fetch_page(url)
         if html is None:
             return None
-        return self._extract_data(html, url)
+        return self.extract_data(html, url)
 
 
 def fmt_time(ms: float) -> str:

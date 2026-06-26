@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   A - 10yen Stamp
+  </title>
+ </head>
+ <body>
+  <div class="modal fade" id="modal-contest-start" role="dialog" tabindex="-1">
+   <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+       <span aria-hidden="true">
+        ×
+       </span>
+      </button>
+      <h4 class="modal-title">
+       Contest started
+      </h4>
+     </div>
+     <div class="modal-body">
+      <p>
+       AtCoder Beginner Contest 233 has begun.
+      </p>
+     </div>
+     <div class="modal-footer">
+      <button class="btn btn-default" data-dismiss="modal" type="button">
+       Close
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="modal fade" id="modal-contest-end" role="dialog" tabindex="-1">
+   <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+       <span aria-hidden="true">
+        ×
+       </span>
+      </button>
+      <h4 class="modal-title">
+       Contest is over
+      </h4>
+     </div>
+     <div class="modal-body">
+      <p>
+       AtCoder Beginner Contest 233 has ended.
+      </p>
+     </div>
+     <div class="modal-footer">
+      <button class="btn btn-default" data-dismiss="modal" type="button">
+       Close
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="float-container" id="main-div">
+   <div class="container" id="main-container" style="padding-top:50px;">
+    <div class="row">
+     <div class="col-sm-12 mb-2 cnvtb-fixed" id="contest-nav-tabs">
+      <div>
+       <small class="contest-duration">
+        Contest Duration:
+        <a href="http://www.timeanddate.com/worldclock/fixedtime.html?iso=20211225T2100&amp;p1=248" target="blank">
+         <time class="fixtime-full">
+          2021-12-25(Sat) 18:00
+         </time>
+        </a>
+        -
+        <a href="http://www.timeanddate.com/worldclock/fixedtime.html?iso=20211225T2240&amp;p1=248" target="blank">
+         <time class="fixtime-full">
+          2021-12-25(Sat) 19:40
+         </time>
+        </a>
+        (local time)
+				(100 minutes)
+       </small>
+       <small class="back-to-home pull-right">
+        <a href="/home">
+         Back to Home
+        </a>
+       </small>
+      </div>
+      <ul class="nav nav-tabs">
+       <li>
+        <a href="/contests/abc233">
+         <span aria-hidden="true" class="glyphicon glyphicon-home">
+         </span>
+         Top
+        </a>
+       </li>
+       <li class="active">
+        <a href="/contests/abc233/tasks">
+         <span aria-hidden="true" class="glyphicon glyphicon-tasks">
+         </span>
+         Tasks
+        </a>
+       </li>
+       <li>
+        <a href="/contests/abc233/clarifications">
+         <span aria-hidden="true" class="glyphicon glyphicon-question-sign">
+         </span>
+         Clarifications
+         <span class="badge" id="clar-badge">
+         </span>
+        </a>
+       </li>
+       <li>
+        <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+         <span aria-hidden="true" class="glyphicon glyphicon-list">
+         </span>
+         Results
+         <span class="caret">
+         </span>
+        </a>
+        <ul class="dropdown-menu">
+         <li>
+          <a href="/contests/abc233/submissions">
+           <span aria-hidden="true" class="glyphicon glyphicon-globe">
+           </span>
+           All Submissions
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a href="/contests/abc233/standings">
+         <span aria-hidden="true" class="glyphicon glyphicon-sort-by-attributes-alt">
+         </span>
+         Standings
+        </a>
+       </li>
+       <li>
+        <a href="/contests/abc233/standings/virtual">
+         <span aria-hidden="true" class="glyphicon glyphicon-sort-by-attributes-alt">
+         </span>
+         Virtual Standings
+        </a>
+       </li>
+       <li>
+        <a href="/contests/abc233/editorial">
+         <span aria-hidden="true" class="glyphicon glyphicon-book">
+         </span>
+         Editorial
+        </a>
+       </li>
+       <li class="pull-right">
+        <a href="javascript:void(0)" id="fix-cnvtb">
+         <span aria-hidden="true" class="glyphicon glyphicon-pushpin">
+         </span>
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="col-sm-12">
+      <span class="h2">
+       A - 10yen Stamp
+       <a class="btn btn-default btn-sm" href="/contests/abc233/tasks/abc233_a/editorial">
+        Editorial
+       </a>
+      </span>
+      <span class="pull-right" id="task-lang-btn">
+       <span data-lang="ja">
+        <img src="//img.atcoder.jp/assets/top/img/flag-lang/ja.png"/>
+       </span>
+       /
+       <span data-lang="en">
+        <img src="//img.atcoder.jp/assets/top/img/flag-lang/en.png"/>
+       </span>
+      </span>
+      <hr/>
+      <p>
+       Time Limit: 2 sec / Memory Limit: 1024 MiB
+      </p>
+      <div id="task-statement">
+       <span class="lang">
+        <span class="lang-ja">
+         <p>
+          配点 :
+          <var>
+           <span>
+            <span class="katex">
+             <span class="katex-mathml">
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+               <semantics>
+                <mrow>
+                 <mn>
+                  100
+                 </mn>
+                </mrow>
+                <annotation encoding="application/x-tex">
+                 100
+                </annotation>
+               </semantics>
+              </math>
+             </span>
+             <span aria-hidden="true" class="katex-html">
+              <span class="base">
+               <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+               </span>
+               <span class="mord">
+                1
+               </span>
+               <span class="mord">
+                0
+               </span>
+               <span class="mord">
+                0
+               </span>
+              </span>
+             </span>
+            </span>
+           </span>
+          </var>
+          点
+         </p>
+         <div class="part">
+          <section>
+           <h3>
+            問題文
+           </h3>
+           <p>
+            サンタさんに手紙を出したい高橋くんは、
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    X
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   X
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                  X
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            円切手が
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mn>
+                    1
+                   </mn>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   1
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord">
+                  1
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            枚だけ貼られた封筒を用意しました。
+            <br/>
+            サンタさんに手紙を届けるためには、貼られている切手の総額が
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    Y
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   Y
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                  Y
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            円以上である必要があります。
+            <br/>
+            高橋くんは、この封筒に
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mn>
+                    10
+                   </mn>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   10
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord">
+                  1
+                 </span>
+                 <span class="mord">
+                  0
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            円切手を何枚か貼り足すことで、貼られている切手の総額を
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    Y
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   Y
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                  Y
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            円以上にしたいです。
+            <br/>
+            高橋くんはこの封筒に、最小で何枚の
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mn>
+                    10
+                   </mn>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   10
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord">
+                  1
+                 </span>
+                 <span class="mord">
+                  0
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            円切手を貼り足す必要がありますか?
+           </p>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            制約
+           </h3>
+           <ul>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mi>
+                     X
+                    </mi>
+                    <mo separator="true">
+                     ,
+                    </mo>
+                    <mi>
+                     Y
+                    </mi>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    X,Y
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.87777em; vertical-align: -0.19444em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                   X
+                  </span>
+                  <span class="mpunct">
+                   ,
+                  </span>
+                  <span class="mspace" style="margin-right: 0.166667em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                   Y
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             は整数
+            </li>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     1
+                    </mn>
+                    <mo>
+                     ≤
+                    </mo>
+                    <mi>
+                     X
+                    </mi>
+                    <mo separator="true">
+                     ,
+                    </mo>
+                    <mi>
+                     Y
+                    </mi>
+                    <mo>
+                     ≤
+                    </mo>
+                    <mn>
+                     1000
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    1 \le X,Y \le 1000
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.78041em; vertical-align: -0.13597em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                  <span class="mrel">
+                   ≤
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                 </span>
+                 <span class="base">
+                  <span class="strut" style="height: 0.87777em; vertical-align: -0.19444em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                   X
+                  </span>
+                  <span class="mpunct">
+                   ,
+                  </span>
+                  <span class="mspace" style="margin-right: 0.166667em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                   Y
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                  <span class="mrel">
+                   ≤
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                 </span>
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+            </li>
+           </ul>
+          </section>
+         </div>
+         <hr/>
+         <div class="io-style">
+          <div class="part">
+           <section>
+            <h3>
+             入力
+            </h3>
+            <p>
+             入力は以下の形式で標準入力から与えられる。
+            </p>
+            <pre><var><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span aria-hidden="true" class="katex-html"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07847em;">X</span></span></span></span></span></var> <var><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi></mrow><annotation encoding="application/x-tex">Y</annotation></semantics></math></span><span aria-hidden="true" class="katex-html"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.22222em;">Y</span></span></span></span></span></var>
+</pre>
+           </section>
+          </div>
+          <div class="part">
+           <section>
+            <h3>
+             出力
+            </h3>
+            <p>
+             答えを整数として出力せよ。
+            </p>
+           </section>
+          </div>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            入力例 1
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample0" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample0" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample0">80 94
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            出力例 1
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample1" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample1" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample1">2
+</pre>
+           <ul>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手に
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     0
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    0
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             枚の
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手を貼り足せば総額が
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円となり、これは手紙を届けるのに必要な
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円未満です。
+            </li>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手に
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     1
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    1
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             枚の
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手を貼り足せば総額が
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     90
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    90
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円となり、これは手紙を届けるのに必要な
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円未満です。
+            </li>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手に
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     2
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    2
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   2
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             枚の
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円切手を貼り足せば総額が
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     100
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    100
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円となり、これは手紙を届けるのに必要な
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             円以上です。
+            </li>
+           </ul>
+          </section>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            入力例 2
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample2" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample2" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample2">1000 63
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            出力例 2
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample3" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample3" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample3">0
+</pre>
+           <p>
+            もともと貼られている切手だけで金額が十分である可能性もあります。
+           </p>
+          </section>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            入力例 3
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample4" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample4" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample4">270 750
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            出力例 3
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample5" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample5" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample5">48
+</pre>
+          </section>
+         </div>
+        </span>
+        <span class="lang-en" style="display: inline;">
+         <p>
+          Score :
+          <var>
+           <span>
+            <span class="katex">
+             <span class="katex-mathml">
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+               <semantics>
+                <mrow>
+                 <mn>
+                  100
+                 </mn>
+                </mrow>
+                <annotation encoding="application/x-tex">
+                 100
+                </annotation>
+               </semantics>
+              </math>
+             </span>
+             <span aria-hidden="true" class="katex-html">
+              <span class="base">
+               <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+               </span>
+               <span class="mord">
+                1
+               </span>
+               <span class="mord">
+                0
+               </span>
+               <span class="mord">
+                0
+               </span>
+              </span>
+             </span>
+            </span>
+           </span>
+          </var>
+          points
+         </p>
+         <div class="part">
+          <section>
+           <h3>
+            Problem Statement
+           </h3>
+           <p>
+            Takahashi wants to send a letter to Santa Claus. He has an envelope with an
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    X
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   X
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                  X
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            -yen (Japanese currency) stamp stuck on it.
+            <br/>
+            To be delivered to Santa Claus, the envelope must have stamps in a total value of at least
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    Y
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   Y
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                  Y
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            yen.
+            <br/>
+            Takahashi will put some more
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mn>
+                    10
+                   </mn>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   10
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord">
+                  1
+                 </span>
+                 <span class="mord">
+                  0
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            -yen stamps so that the envelope will have stamps worth at least
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mi>
+                    Y
+                   </mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   Y
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                  Y
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            yen in total.
+            <br/>
+            At least how many more
+            <var>
+             <span>
+              <span class="katex">
+               <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                 <semantics>
+                  <mrow>
+                   <mn>
+                    10
+                   </mn>
+                  </mrow>
+                  <annotation encoding="application/x-tex">
+                   10
+                  </annotation>
+                 </semantics>
+                </math>
+               </span>
+               <span aria-hidden="true" class="katex-html">
+                <span class="base">
+                 <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                 </span>
+                 <span class="mord">
+                  1
+                 </span>
+                 <span class="mord">
+                  0
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </var>
+            -yen stamps does Takahashi need to put on the envelope?
+           </p>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            Constraints
+           </h3>
+           <ul>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mi>
+                     X
+                    </mi>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    X
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                   X
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             and
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mi>
+                     Y
+                    </mi>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    Y
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.68333em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                   Y
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             are integers.
+            </li>
+            <li>
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     1
+                    </mn>
+                    <mo>
+                     ≤
+                    </mo>
+                    <mi>
+                     X
+                    </mi>
+                    <mo separator="true">
+                     ,
+                    </mo>
+                    <mi>
+                     Y
+                    </mi>
+                    <mo>
+                     ≤
+                    </mo>
+                    <mn>
+                     1000
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    1 \le X,Y \le 1000
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.78041em; vertical-align: -0.13597em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                  <span class="mrel">
+                   ≤
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                 </span>
+                 <span class="base">
+                  <span class="strut" style="height: 0.87777em; vertical-align: -0.19444em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.07847em;">
+                   X
+                  </span>
+                  <span class="mpunct">
+                   ,
+                  </span>
+                  <span class="mspace" style="margin-right: 0.166667em;">
+                  </span>
+                  <span class="mord mathnormal" style="margin-right: 0.22222em;">
+                   Y
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                  <span class="mrel">
+                   ≤
+                  </span>
+                  <span class="mspace" style="margin-right: 0.277778em;">
+                  </span>
+                 </span>
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+            </li>
+           </ul>
+          </section>
+         </div>
+         <hr/>
+         <div class="io-style">
+          <div class="part">
+           <section>
+            <h3>
+             Input
+            </h3>
+            <p>
+             Input is given from Standard Input in the following format:
+            </p>
+            <pre><var><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span aria-hidden="true" class="katex-html"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07847em;">X</span></span></span></span></span></var> <var><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi></mrow><annotation encoding="application/x-tex">Y</annotation></semantics></math></span><span aria-hidden="true" class="katex-html"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.22222em;">Y</span></span></span></span></span></var>
+</pre>
+           </section>
+          </div>
+          <div class="part">
+           <section>
+            <h3>
+             Output
+            </h3>
+            <p>
+             Print the answer as an integer.
+            </p>
+           </section>
+          </div>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Input 1
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample6" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample6" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample6">80 94
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Output 1
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample7" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample7" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample7">2
+</pre>
+           <ul>
+            <li>
+             After adding zero
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamps to the
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamp, the total is
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen, which is less than the required amount of
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen.
+            </li>
+            <li>
+             After adding one
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamp to the
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamp, the total is
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     90
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    90
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen, which is less than the required amount of
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen.
+            </li>
+            <li>
+             After adding two
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     10
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    10
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamps to the
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     80
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    80
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   8
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             -yen stamp, the total is
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     100
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    100
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   1
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                  <span class="mord">
+                   0
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen, which is not less than the required amount of
+             <var>
+              <span>
+               <span class="katex">
+                <span class="katex-mathml">
+                 <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                   <mrow>
+                    <mn>
+                     94
+                    </mn>
+                   </mrow>
+                   <annotation encoding="application/x-tex">
+                    94
+                   </annotation>
+                  </semantics>
+                 </math>
+                </span>
+                <span aria-hidden="true" class="katex-html">
+                 <span class="base">
+                  <span class="strut" style="height: 0.64444em; vertical-align: 0em;">
+                  </span>
+                  <span class="mord">
+                   9
+                  </span>
+                  <span class="mord">
+                   4
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </var>
+             yen.
+            </li>
+           </ul>
+          </section>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Input 2
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample8" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample8" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample8">1000 63
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Output 2
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample9" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample9" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample9">0
+</pre>
+           <p>
+            The envelope may already have a stamp with enough value.
+           </p>
+          </section>
+         </div>
+         <hr/>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Input 3
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample10" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample10" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample10">270 750
+</pre>
+          </section>
+         </div>
+         <div class="part">
+          <section>
+           <h3>
+            Sample Output 3
+            <span class="btn btn-default btn-sm btn-copy ml-1" data-original-title="Copied!" data-target="pre-sample11" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </h3>
+           <div class="div-btn-copy">
+            <span class="btn-copy btn-pre" data-original-title="Copied!" data-target="pre-sample11" data-toggle="tooltip" data-trigger="manual" tabindex="0" title="">
+             Copy
+            </span>
+           </div>
+           <pre id="pre-sample11">48
+</pre>
+          </section>
+         </div>
+        </span>
+       </span>
+      </div>
+     </div>
+    </div>
+    <hr/>
+    <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-title="A - 10yen Stamp" data-a2a-url="https://atcoder.jp/contests/abc233/tasks/abc233_a?lang=en" style="line-height: 20px;">
+     <a class="a2a_button_facebook" href="/#facebook" rel="nofollow noopener" target="_blank">
+      <span class="a2a_svg a2a_s__default a2a_s_facebook" style="background-color: rgb(8, 102, 255); width: 20px; line-height: 20px; height: 20px; background-size: 20px; border-radius: 3px;">
+      </span>
+      <span class="a2a_label">
+       Facebook
+      </span>
+     </a>
+     <a class="a2a_button_twitter" href="/#twitter" rel="nofollow noopener" target="_blank">
+      <span class="a2a_svg a2a_s__default a2a_s_twitter" style="background-color: rgb(29, 155, 240); width: 20px; line-height: 20px; height: 20px; background-size: 20px; border-radius: 3px;">
+      </span>
+      <span class="a2a_label">
+       Twitter
+      </span>
+     </a>
+     <a class="a2a_button_telegram" href="/#telegram" rel="nofollow noopener" target="_blank">
+      <span class="a2a_svg a2a_s__default a2a_s_telegram" style="background-color: rgb(44, 165, 224); width: 20px; line-height: 20px; height: 20px; background-size: 20px; border-radius: 3px;">
+      </span>
+      <span class="a2a_label">
+       Telegram
+      </span>
+     </a>
+     <a class="a2a_dd" href="https://www.addtoany.com/share#url=https%3A%2F%2Fatcoder.jp%2Fcontests%2Fabc233%2Ftasks%2Fabc233_a%3Flang%3Den&amp;title=A%20-%2010yen%20Stamp">
+      <span class="a2a_svg a2a_s__default a2a_s_a2a" style="background-color: rgb(1, 102, 255); width: 20px; line-height: 20px; height: 20px; background-size: 20px; border-radius: 3px;">
+      </span>
+      <span class="a2a_label a2a_localize" data-a2a-localize="inner,Share">
+       Share
+      </span>
+     </a>
+     <div style="clear: both;">
+     </div>
+    </div>
+   </div>
+   <hr/>
+  </div>
+  <div class="container" style="margin-bottom: 80px;">
+  </div>
+  <p class="contest-timer" id="fixed-server-timer" style="opacity: 1;">
+   2026-06-26 (Fri)
+   <br/>
+   17:03:43 +06:00
+  </p>
+  <div id="scroll-page-top" style="display:none;">
+   <span aria-hidden="true" class="glyphicon glyphicon-arrow-up">
+   </span>
+   Page Top
+  </div>
+  <div id="addtoany" style="position: static;">
+   <div aria-label="Close" class="a2a_overlay a2a_localize" data-a2a-localize="label,Close" id="a2a_overlay" tabindex="0">
+   </div>
+   <div aria-label="" aria-modal="true" class="a2a_modal a2a_hide" id="a2a_modal" role="dialog" tabindex="-1">
+    <div class="a2a_modal_body a2a_menu a2a_hide" id="a2a_copy_link">
+     <label class="a2a_svg a2a_s_link a2a_logo_color" for="a2a_copy_link_text" id="a2a_copy_link_icon">
+     </label>
+     <input id="a2a_copy_link_text" readonly="" title="Copy link" type="text"/>
+     <div id="a2a_copy_link_copied">
+      ✓
+     </div>
+    </div>
+    <div aria-modal="true" class="a2a_modal_body a2a_menu a2a_thanks a2a_hide" id="a2a_thanks" role="dialog" tabindex="0">
+     <div class="a2a_localize" data-a2a-localize="inner,ThanksForSharing">
+      Thanks for sharing!
+     </div>
+    </div>
+   </div>
+   <div aria-label="Share" aria-modal="true" class="a2a_menu a2a_full a2a_localize" data-a2a-localize="title,Share" id="a2apage_full" role="dialog" tabindex="-1">
+    <div class="a2a_full_header">
+     <div class="a2a_menu_find_container" id="a2apage_find_container">
+      <label class="a2a_svg a2a_s_find" for="a2apage_find" id="a2apage_find_icon">
+      </label>
+      <input autocomplete="off" class="a2a_menu_find a2a_localize" data-a2a-localize="title,FindAnyServiceToAddTo" id="a2apage_find" title="Find any service" type="text"/>
+     </div>
+    </div>
+    <div class="a2a_full_services" id="a2apage_full_services" role="list">
+    </div>
+    <div class="a2a_full_footer">
+     <a href="https://www.addtoany.com" rel="noopener" target="_blank" title="Share Buttons">
+      <span class="a2a_svg a2a_s__default a2a_s_a2a a2a_logo_color">
+      </span>
+      AddToAny
+     </a>
+    </div>
+   </div>
+   <div aria-label="Share" class="a2a_menu a2a_mini a2a_localize a2a_hide" data-a2a-localize="label,Share" id="a2apage_dropdown" tabindex="-1">
+    <div class="a2a_mini_services" id="a2apage_mini_services" role="list">
+    </div>
+    <div class="a2a_cols_container" id="a2apage_cols_container">
+     <div class="a2a_col1" id="a2apage_col1">
+     </div>
+     <div class="a2a_hide" id="a2apage_2_col1" role="list">
+     </div>
+     <div class="a2a_clear">
+     </div>
+    </div>
+    <div class="a2apage_wide a2a_wide">
+     <a class="a2a_more a2a_localize" data-a2a-localize="title,ShowAll" href="#addtoany" id="a2apage_show_more_less" title="Show all">
+      <span class="a2a_svg a2a_s__default a2a_s_a2a a2a_logo_color">
+      </span>
+      <span class="a2a_localize" data-a2a-localize="inner,More">
+       More…
+      </span>
+     </a>
+    </div>
+   </div>
+   <div style="height: 1px; width: 1px; position: absolute; z-index: 100000; top: 0px; visibility: hidden;">
+   </div>
+  </div>
+ </body>
+</html>

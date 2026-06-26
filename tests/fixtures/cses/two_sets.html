@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   CSES - Two Sets
+  </title>
+ </head>
+ <body class="with-sidebar norm-width">
+  <div class="header">
+   <div>
+    <a class="logo" href="/">
+     <img alt="CSES" src="/logo.png?1"/>
+    </a>
+    <a class="menu-toggle" onclick="document.body.classList.toggle('menu-open');">
+     <i class="fas fa-bars">
+     </i>
+    </a>
+    <div class="controls">
+     <a class="account" href="/login">
+      Login
+     </a>
+     <span>
+      —
+     </span>
+     <a href="/darkmode" onclick="return toggle_theme()" title="Toggle dark mode">
+      <i aria-label="Dark mode" class="fas fa-adjust">
+      </i>
+      <span>
+       Dark mode
+      </span>
+     </a>
+    </div>
+   </div>
+  </div>
+  <div class="skeleton">
+   <div class="navigation">
+    <div class="title-block">
+     <h3>
+      <a href="/problemset/list/">
+       CSES Problem Set
+      </a>
+     </h3>
+     <h1>
+      Two Sets
+     </h1>
+     <ul class="nav">
+      <li>
+       <a class="current" href="/problemset/task/1092/">
+        Task
+       </a>
+      </li>
+      <li>
+       <a href="/problemset/stats/1092/">
+        Statistics
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div class="content-wrapper">
+    <div class="content">
+     <ul class="task-constraints">
+      <li>
+       <b>
+        Time limit:
+       </b>
+       1.00 s
+      </li>
+      <li>
+       <b>
+        Memory limit:
+       </b>
+       512 MB
+      </li>
+     </ul>
+     <div class="md">
+      <p>
+       Your task is to divide the numbers
+       <span class="math math-inline">
+        <span class="katex">
+         <span class="katex-mathml">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+           <semantics>
+            <mrow>
+             <mn>
+              1
+             </mn>
+             <mo separator="true">
+              ,
+             </mo>
+             <mn>
+              2
+             </mn>
+             <mo separator="true">
+              ,
+             </mo>
+             <mo>
+              …
+             </mo>
+             <mo separator="true">
+              ,
+             </mo>
+             <mi>
+              n
+             </mi>
+            </mrow>
+            <annotation encoding="application/x-tex">
+             1,2,\ldots,n
+            </annotation>
+           </semantics>
+          </math>
+         </span>
+         <span aria-hidden="true" class="katex-html">
+          <span class="base">
+           <span class="strut" style="height: 0.8389em; vertical-align: -0.1944em;">
+           </span>
+           <span class="mord">
+            1
+           </span>
+           <span class="mpunct">
+            ,
+           </span>
+           <span class="mspace" style="margin-right: 0.1667em;">
+           </span>
+           <span class="mord">
+            2
+           </span>
+           <span class="mpunct">
+            ,
+           </span>
+           <span class="mspace" style="margin-right: 0.1667em;">
+           </span>
+           <span class="minner">
+            …
+           </span>
+           <span class="mspace" style="margin-right: 0.1667em;">
+           </span>
+           <span class="mpunct">
+            ,
+           </span>
+           <span class="mspace" style="margin-right: 0.1667em;">
+           </span>
+           <span class="mord mathnormal">
+            n
+           </span>
+          </span>
+         </span>
+        </span>
+       </span>
+       into two sets of equal sum.
+      </p>
+      <h1 id="input">
+       Input
+      </h1>
+      <p>
+       The only input line contains an integer
+       <span class="math math-inline">
+        <span class="katex">
+         <span class="katex-mathml">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+           <semantics>
+            <mrow>
+             <mi>
+              n
+             </mi>
+            </mrow>
+            <annotation encoding="application/x-tex">
+             n
+            </annotation>
+           </semantics>
+          </math>
+         </span>
+         <span aria-hidden="true" class="katex-html">
+          <span class="base">
+           <span class="strut" style="height: 0.4306em;">
+           </span>
+           <span class="mord mathnormal">
+            n
+           </span>
+          </span>
+         </span>
+        </span>
+       </span>
+       .
+      </p>
+      <h1 id="output">
+       Output
+      </h1>
+      <p>
+       Print "YES", if the division is possible, and "NO" otherwise.
+      </p>
+      <p>
+       After this, if the division is possible, print an example of how to create the sets. First, print the number of elements in the first set followed by the elements themselves in a separate line, and then, print the second set in a similar way.
+      </p>
+      <h1 id="constraints">
+       Constraints
+      </h1>
+      <ul>
+       <li>
+        <span class="math math-inline">
+         <span class="katex">
+          <span class="katex-mathml">
+           <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <semantics>
+             <mrow>
+              <mn>
+               1
+              </mn>
+              <mo>
+               ≤
+              </mo>
+              <mi>
+               n
+              </mi>
+              <mo>
+               ≤
+              </mo>
+              <mn>
+               1
+              </mn>
+              <msup>
+               <mn>
+                0
+               </mn>
+               <mn>
+                6
+               </mn>
+              </msup>
+             </mrow>
+             <annotation encoding="application/x-tex">
+              1 \le n \le 10^6
+             </annotation>
+            </semantics>
+           </math>
+          </span>
+          <span aria-hidden="true" class="katex-html">
+           <span class="base">
+            <span class="strut" style="height: 0.7804em; vertical-align: -0.136em;">
+            </span>
+            <span class="mord">
+             1
+            </span>
+            <span class="mspace" style="margin-right: 0.2778em;">
+            </span>
+            <span class="mrel">
+             ≤
+            </span>
+            <span class="mspace" style="margin-right: 0.2778em;">
+            </span>
+           </span>
+           <span class="base">
+            <span class="strut" style="height: 0.7719em; vertical-align: -0.136em;">
+            </span>
+            <span class="mord mathnormal">
+             n
+            </span>
+            <span class="mspace" style="margin-right: 0.2778em;">
+            </span>
+            <span class="mrel">
+             ≤
+            </span>
+            <span class="mspace" style="margin-right: 0.2778em;">
+            </span>
+           </span>
+           <span class="base">
+            <span class="strut" style="height: 0.8141em;">
+            </span>
+            <span class="mord">
+             1
+            </span>
+            <span class="mord">
+             <span class="mord">
+              0
+             </span>
+             <span class="msupsub">
+              <span class="vlist-t">
+               <span class="vlist-r">
+                <span class="vlist" style="height: 0.8141em;">
+                 <span class="" style="top: -3.063em; margin-right: 0.05em;">
+                  <span class="pstrut" style="height: 2.7em;">
+                  </span>
+                  <span class="sizing reset-size6 size3 mtight">
+                   <span class="mord mtight">
+                    6
+                   </span>
+                  </span>
+                 </span>
+                </span>
+               </span>
+              </span>
+             </span>
+            </span>
+           </span>
+          </span>
+         </span>
+        </span>
+       </li>
+      </ul>
+      <h1 id="example1">
+       Example 1
+      </h1>
+      <p>
+       Input:
+      </p>
+      <pre>7
+</pre>
+      <p>
+       Output:
+      </p>
+      <pre>YES
+4
+1 2 4 7
+3
+3 5 6
+</pre>
+      <h1 id="example2">
+       Example 2
+      </h1>
+      <p>
+       Input:
+      </p>
+      <pre>6
+</pre>
+      <p>
+       Output:
+      </p>
+      <pre>NO
+</pre>
+     </div>
+    </div>
+    <div class="nav sidebar">
+     <h4>
+      Introductory Problems
+     </h4>
+     ...
+     <a href="/problemset/task/1070">
+      Permutations
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1071">
+      Number Spiral
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1072">
+      Two Knights
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a class="current" href="/problemset/task/1092">
+      Two Sets
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1617">
+      Bit Strings
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1618">
+      Trailing Zeros
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1754">
+      Coin Piles
+      <span class="task-score icon">
+      </span>
+     </a>
+     <a href="/problemset/task/1755">
+      Palindrome Reorder
+      <span class="task-score icon">
+      </span>
+     </a>
+     ...
+     <hr/>
+     <h4>
+      Your submissions
+     </h4>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

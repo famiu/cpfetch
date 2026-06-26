@@ -1,0 +1,29 @@
+{
+  "name": "A - 10yen Stamp",
+  "site": "atcoder",
+  "platform": "AtCoder",
+  "url": "https://atcoder.jp/contests/abc233/tasks/abc233_a",
+  "time_limit": 2000.0,
+  "memory_limit": 1024,
+  "body_html": "<span class=\"lang-en\" style=\"display: inline;\">\n\n<div class=\"part\">\n<section>\n\n<p>\n            Takahashi wants to send a letter to Santa Claus. He has an envelope with an\n            XX-MATH-0-XX\n            -yen (Japanese currency) stamp stuck on it.\n            <br/>\n            To be delivered to Santa Claus, the envelope must have stamps in a total value of at least\n            XX-MATH-1-XX\n            yen.\n            <br/>\n            Takahashi will put some more\n            XX-MATH-2-XX\n            -yen stamps so that the envelope will have stamps worth at least\n            XX-MATH-3-XX\n            yen in total.\n            <br/>\n            At least how many more\n            XX-MATH-4-XX\n            -yen stamps does Takahashi need to put on the envelope?\n           </p>\n</section>\n</div>\n<div class=\"part\">\n<section>\n<h2>\n            Constraints\n           </h2>\n<ul>\n<li>\nXX-MATH-5-XX\n             and\n             XX-MATH-6-XX\n             are integers.\n            </li>\n<li>\nXX-MATH-7-XX\n</li>\n</ul>\n</section>\n</div>\n\n<div class=\"io-style\">\n<div class=\"part\">\n<section>\n<h2>\n             Input\n            </h2>\n<p>\n             Input is given from Standard Input in the following format:\n            </p>\n<pre>XX-MATH-8-XX XX-MATH-9-XX\n</pre>\n</section>\n</div>\n<div class=\"part\">\n<section>\n<h2>\n             Output\n            </h2>\n<p>\n             Print the answer as an integer.\n            </p>\n</section>\n</div>\n</div></span>",
+  "samples": [
+    {
+      "input": "80 94\n",
+      "output": "2\n"
+    },
+    {
+      "input": "1000 63\n",
+      "output": "0\n"
+    },
+    {
+      "input": "270 750\n",
+      "output": "48\n"
+    }
+  ],
+  "math_values": [
+    "$X$",
+    "$Y$",
+    "$10$",
+    "$1 \\le{} X,Y \\le{} 1000$"
+  ]
+}

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>
+   Sum of Digits Practice Coding Problem
+  </title>
+  <!-- Initial loader classes -->
+ </head>
+ <body style="background:#1d1e23;">
+  <div class="no-print" id="root">
+   <div style="background: rgb(29, 30, 35);">
+    <div aria-hidden="true" class="MuiBackdrop-root _backdrop_pm713_1 undefined css-11m57ox" style="opacity: 0; visibility: hidden;">
+     <span class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate _progress_pm713_7 css-1bkwg0l" role="progressbar">
+      <span class="MuiLinearProgress-bar MuiLinearProgress-bar1 MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate css-y6kna5">
+      </span>
+      <span class="MuiLinearProgress-bar MuiLinearProgress-bar2 MuiLinearProgress-barColorPrimary MuiLinearProgress-bar2Indeterminate css-mddmmv">
+      </span>
+     </span>
+    </div>
+    <div class="_pageContainer_1se0b_3 _dark_1se0b_9" style="max-width: 100%;">
+     <div style="display: block;">
+      <div class="_problem-submit-page__container_c2pcj_2">
+       <div class="_problemBanner__container_a2x1m_314 _dark_a2x1m_126">
+        <div class="_navigate-button__container_a2x1m_725">
+         <div class="_navigation-left-wrapper_a2x1m_731">
+          <a aria-label="Back to practice old" class="_backToPractice__box_a2x1m_663" href="/practice-old">
+           <div class="_icon__container_a2x1m_362">
+           </div>
+          </a>
+          <div class="_difficulty-ratings__box_a2x1m_503 _dark_a2x1m_126">
+           <span>
+            Difficulty:
+           </span>
+           <span class="_value_a2x1m_395 _dark_a2x1m_126">
+            455
+           </span>
+          </div>
+          <div class="_darkModeContainer_2m751_2 _dark_2m751_2" style="margin-left: 0px;" title="Switch to Light Mode">
+          </div>
+          <div class="_expand__container_a2x1m_756 _dark_a2x1m_126">
+           Expand
+           <span class="_icon__container_a2x1m_362">
+           </span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="_submit__container_c2pcj_17 _dark_c2pcj_20">
+        <div class="_split__container_c2pcj_23 _dark_c2pcj_20">
+         <div class="_tabs-wrapper__panel_c2pcj_29" style="width: calc(50% - 5px);">
+          <div class="_tabPanel_15j3k_2 _dark_15j3k_30 MuiBox-root css-0">
+           <div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 notranslate css-vwhgwc" style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);">
+            <div class="MuiTabs-root _tab__container_c2pcj_60 _dark_c2pcj_20 css-1fa633z">
+             <div class="MuiTabs-scroller MuiTabs-fixed css-2xu61f" style="overflow: hidden; margin-bottom: 0px;">
+              <div class="MuiTabs-list MuiTabs-flexContainer css-17do188" role="tablist">
+               <button aria-controls="vertical-tab-panel-0" aria-selected="true" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected _tab__title_c2pcj_40 _dark_c2pcj_20 css-u9647s" id="vertical-tab-panel-0" role="tab" tabindex="0" type="button">
+                <span class="MuiTab-wrapper">
+                 Statement
+                </span>
+               </button>
+               <button aria-controls="vertical-tab-panel-1" aria-selected="false" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary _tab__title_c2pcj_40 _dark_c2pcj_20 css-u9647s" id="vertical-tab-panel-1" role="tab" tabindex="-1" type="button">
+                <span class="MuiTab-wrapper">
+                 Hints
+                </span>
+               </button>
+               <button aria-controls="vertical-tab-panel-2" aria-selected="false" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary _tab__title_c2pcj_40 _dark_c2pcj_20 css-u9647s" id="vertical-tab-panel-2" role="tab" tabindex="-1" type="button">
+                <span class="MuiTab-wrapper">
+                 Submissions
+                </span>
+               </button>
+               <button aria-controls="vertical-tab-panel-3" aria-selected="false" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary _tab__title_c2pcj_40 _dark_c2pcj_20 css-u9647s" id="vertical-tab-panel-3" role="tab" tabindex="-1" type="button">
+                <span class="MuiTab-wrapper">
+                 Solution
+                </span>
+               </button>
+               <button aria-controls="vertical-tab-panel-4" aria-selected="false" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary _tab__title_c2pcj_40 _dark_c2pcj_20 css-u9647s" id="vertical-tab-panel-4" role="tab" tabindex="-1" type="button">
+                <span class="MuiTab-wrapper">
+                 AI Help
+                </span>
+               </button>
+              </div>
+              <span class="MuiTabs-indicator css-1bv7ie6" style="left: 0px; width: 127px; background: rgb(90, 134, 220);">
+              </span>
+             </div>
+            </div>
+           </div>
+           <div aria-labelledby="vertical-tab-panel-0" class="_tab__content_c2pcj_68 _dark_c2pcj_20" id="vertical-tab-panel-0" style="height: calc(-97px + 100vh);">
+            <div class="MuiBox-root css-0">
+             <div class="_problemStatement__container_10e0b_2 _dark_10e0b_20">
+              <div class="" style="display: block;">
+               <div class="_fullscreen__container_10e0b_87 _dark_10e0b_20">
+                <div aria-label="Go Fullscreen" class="css-1eiukdk _fullscreen-clickable__container_10e0b_131">
+                 <span class="_icon__box_10e0b_147">
+                  <i class="_fullscreen__icon_10e0b_159">
+                  </i>
+                 </span>
+                </div>
+               </div>
+               <hr class="MuiDivider-root MuiDivider-fullWidth _fullscreen__divider_10e0b_188 _dark_10e0b_20 css-9k49o2"/>
+              </div>
+              <div class="_problem-statement__inner__container_10e0b_202" style="display: flex;">
+               <div class="_learnRecommendationBlock_10e0b_218 _dark_10e0b_20">
+                <div class="_titleContainer_10e0b_239">
+                 <div class="_i_icon_10e0b_244 _dark_10e0b_20">
+                 </div>
+                 <div class="_blockTitle_10e0b_265">
+                  Learn the building blocks of programming languages
+                 </div>
+                </div>
+                <div class="_blockDescription_10e0b_270">
+                 Take our free programming courses and learn to solve problems like these.
+                </div>
+                <a class="_link_10e0b_102 _dark_10e0b_20 _hoverClass_2pyv4_10" href="https://www.codechef.com/learn" rel="noopener noreferrer" target="_blank">
+                 Start Learning
+                 <span class="_icon__container_10e0b_114">
+                 </span>
+                </a>
+               </div>
+               <div class="_problemBody_bh3c4_71 _dark_bh3c4_66 print" id="problem-statement">
+                <div class="_problemStatementWrapper_bh3c4_33">
+                 <div class="_problemBodyContent_bh3c4_71">
+                  <h3 class="notranslate">
+                   Sum of Digits
+                  </h3>
+                  <p>
+                   You're given an integer
+                   <b>
+                    N
+                   </b>
+                   . Write a program to calculate the sum of all the digits of
+                   <b>
+                    N
+                   </b>
+                   .
+                  </p>
+                  <div class="notranslate">
+                   <h3>
+                    Input Format
+                   </h3>
+                   <p>
+                    The first line contains an integer
+                    <b>
+                     T
+                    </b>
+                    , the total number of testcases. Then follow
+                    <b>
+                     T
+                    </b>
+                    lines, each line contains an integer
+                    <b>
+                     N
+                    </b>
+                    .
+                   </p>
+                  </div>
+                  <div class="notranslate">
+                   <h3>
+                    Output Format
+                   </h3>
+                   <p>
+                    For each test case, calculate the sum of digits of
+                    <b>
+                     N
+                    </b>
+                    , and display it in a new line.
+                   </p>
+                  </div>
+                  <h3 class="notranslate">
+                   Constraints
+                  </h3>
+                  <div class="_html_code__block_bh3c4_219 notranslate">
+                   <ul>
+                    <li>
+                     <span class="math math-inline">
+                      <span class="katex">
+                       <span class="katex-mathml">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML">
+                         <semantics>
+                          <mrow>
+                           <mn>
+                            1
+                           </mn>
+                           <mo>
+                            ≤
+                           </mo>
+                           <mi>
+                            T
+                           </mi>
+                           <mo>
+                            ≤
+                           </mo>
+                           <mn>
+                            1000
+                           </mn>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                           1 \leq T \leq 1000
+                          </annotation>
+                         </semantics>
+                        </math>
+                       </span>
+                       <span aria-hidden="true" class="katex-html">
+                        <span class="base">
+                         <span class="strut" style="height: 0.7804em; vertical-align: -0.136em;">
+                         </span>
+                         <span class="mord">
+                          1
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                         <span class="mrel">
+                          ≤
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                        </span>
+                        <span class="base">
+                         <span class="strut" style="height: 0.8193em; vertical-align: -0.136em;">
+                         </span>
+                         <span class="mord mathnormal" style="margin-right: 0.13889em;">
+                          T
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                         <span class="mrel">
+                          ≤
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                        </span>
+                        <span class="base">
+                         <span class="strut" style="height: 0.6444em;">
+                         </span>
+                         <span class="mord">
+                          1000
+                         </span>
+                        </span>
+                       </span>
+                      </span>
+                     </span>
+                    </li>
+                    <li>
+                     <span class="math math-inline">
+                      <span class="katex">
+                       <span class="katex-mathml">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML">
+                         <semantics>
+                          <mrow>
+                           <mn>
+                            1
+                           </mn>
+                           <mo>
+                            ≤
+                           </mo>
+                           <mi>
+                            N
+                           </mi>
+                           <mo>
+                            ≤
+                           </mo>
+                           <mn>
+                            1000000
+                           </mn>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                           1 \leq N \leq 1000000
+                          </annotation>
+                         </semantics>
+                        </math>
+                       </span>
+                       <span aria-hidden="true" class="katex-html">
+                        <span class="base">
+                         <span class="strut" style="height: 0.7804em; vertical-align: -0.136em;">
+                         </span>
+                         <span class="mord">
+                          1
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                         <span class="mrel">
+                          ≤
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                        </span>
+                        <span class="base">
+                         <span class="strut" style="height: 0.8193em; vertical-align: -0.136em;">
+                         </span>
+                         <span class="mord mathnormal" style="margin-right: 0.10903em;">
+                          N
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                         <span class="mrel">
+                          ≤
+                         </span>
+                         <span class="mspace" style="margin-right: 0.2778em;">
+                         </span>
+                        </span>
+                        <span class="base">
+                         <span class="strut" style="height: 0.6444em;">
+                         </span>
+                         <span class="mord">
+                          1000000
+                         </span>
+                        </span>
+                       </span>
+                      </span>
+                     </span>
+                    </li>
+                   </ul>
+                  </div>
+                  <h3 class="notranslate">
+                   Sample 1:
+                  </h3>
+                  <div class="_input_output__table_bh3c4_231 notranslate">
+                   <div class="_text_copy__container_bh3c4_235">
+                    <div class="_text_copy_bh3c4_235 _input_top__box_bh3c4_248">
+                     <span>
+                      Input
+                     </span>
+                     <div aria-label="Copy to clipboard" class="undefined css-1eiukdk" style="pointer-events: all;">
+                      <span class="_icon__box_10bs7_2 _dark_10bs7_27 undefined">
+                       <i class="_copy__icon_10bs7_14">
+                       </i>
+                      </span>
+                     </div>
+                    </div>
+                    <div class="_text_copy_bh3c4_235 _ouput_top__box_bh3c4_251">
+                     <span>
+                      Output
+                     </span>
+                     <div aria-label="Copy to clipboard" class="undefined css-1eiukdk" style="pointer-events: all;">
+                      <span class="_icon__box_10bs7_2 _dark_10bs7_27 undefined">
+                       <i class="_copy__icon_10bs7_14">
+                       </i>
+                      </span>
+                     </div>
+                    </div>
+                   </div>
+                   <div class="_values__container_bh3c4_254">
+                    <div class="_values_bh3c4_254">
+                     <pre>3 
+12345
+31203
+2123
+</pre>
+                    </div>
+                    <div class="_values_bh3c4_254">
+                     <pre>15
+9
+8
+</pre>
+                    </div>
+                   </div>
+                  </div>
+                  <div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <div class="_feedback__container_10e0b_460">
+               </div>
+               <hr class="MuiDivider-root MuiDivider-fullWidth _horizontal__divider_10e0b_322 _dark_10e0b_20 css-9k49o2"/>
+               <div class="_moreInfo__container_10e0b_463 _dark_10e0b_20">
+                <div class="_accordion_10e0b_466">
+                 <div class="_accordion__summary_10e0b_470">
+                  More Info
+                 </div>
+                 <div class="_accordion__details_10e0b_475">
+                  <div>
+                   <span class="_title_10e0b_239">
+                    Time limit
+                   </span>
+                   <span class="_value_10e0b_497">
+                    1 secs
+                   </span>
+                  </div>
+                  <div>
+                   <span class="_title_10e0b_239">
+                    Memory limit
+                   </span>
+                   <span class="_value_10e0b_497">
+                    1.5 GB
+                   </span>
+                  </div>
+                  <div>
+                   <span class="_title_10e0b_239">
+                    Source Limit
+                   </span>
+                   <span class="_value_10e0b_497">
+                    50000 Bytes
+                   </span>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <hr class="MuiDivider-root MuiDivider-fullWidth _horizontal__divider_10e0b_322 _dark_10e0b_20 css-9k49o2"/>
+               <div class="_contributorsInfo__container_10e0b_467 _dark_10e0b_20">
+                <div class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation1 MuiAccordion-root MuiAccordion-gutters _accordion_10e0b_466 css-1sh2c7f" style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);">
+                 <h3 class="MuiAccordion-heading css-wnfue5">
+                  <button aria-expanded="false" class="MuiButtonBase-root MuiAccordionSummary-root MuiAccordionSummary-gutters _accordion__summary_10e0b_470 css-ececx" tabindex="0" type="button">
+                   <span class="MuiAccordionSummary-content MuiAccordionSummary-contentGutters css-1b8uc0m">
+                    <span>
+                     Contributors
+                    </span>
+                   </span>
+                   <span class="MuiAccordionSummary-expandIconWrapper css-f8wb7g">
+                   </span>
+                  </button>
+                 </h3>
+                 <div class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-abqyn" style="min-height: 0px;">
+                  <div class="MuiCollapse-wrapper MuiCollapse-vertical css-15830to">
+                   <div class="MuiCollapse-wrapperInner MuiCollapse-vertical css-9vd5ud">
+                    <div class="MuiAccordion-region" role="region">
+                     <div class="MuiAccordionDetails-root _accordion__details_10e0b_475 css-l9xe8y">
+                      <div>
+                       <span class="_title_10e0b_239">
+                        Author(s)
+                       </span>
+                       <div class="_usernamesContainer_10e0b_492">
+                        <a class="_value_10e0b_497 _hoverClass_2pyv4_10" href="https://www.codechef.com/users/vicky002" rel="noopener noreferrer" target="_blank">
+                         vicky002
+                        </a>
+                       </div>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div aria-labelledby="vertical-tab-panel-1" class="_tab__content_c2pcj_68 _dark_c2pcj_20" hidden="" id="vertical-tab-panel-1" style="height: calc(-97px + 100vh);">
+           </div>
+           <div aria-labelledby="vertical-tab-panel-2" class="_tab__content_c2pcj_68 _dark_c2pcj_20" hidden="" id="vertical-tab-panel-2" style="height: calc(-97px + 100vh);">
+           </div>
+           <div aria-labelledby="vertical-tab-panel-3" class="_tab__content_c2pcj_68 _dark_c2pcj_20" hidden="" id="vertical-tab-panel-3" style="height: calc(-97px + 100vh);">
+           </div>
+           <div aria-labelledby="vertical-tab-panel-4" class="_tab__content_c2pcj_68 _dark_c2pcj_20" hidden="" id="vertical-tab-panel-4" style="height: calc(-97px + 100vh);">
+           </div>
+          </div>
+         </div>
+         <div class="gutter gutter-horizontal" style="width: 10px;">
+         </div>
+         <div class="_ideWrapper__panel_c2pcj_83 _dark_c2pcj_20" style="width: calc(50% - 5px);">
+          <div class="_ide_r2w6z_2 _dark_r2w6z_30 notranslate">
+           <div class="_ide__container_r2w6z_6" style="height: calc(-77px + 100vh);">
+            <div>
+             <div class="_ideHeader_1g5qp_14 _dark_1g5qp_55">
+              <div>
+               <div class="MuiFormControl-root css-1qk38wv" style="width: 156px;">
+                <div class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl _language__select_1g5qp_35 _dark_1g5qp_55 MuiSelect-root css-98ra8i">
+                 <div aria-expanded="false" aria-haspopup="listbox" aria-labelledby="language-select" class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-mp9f0v" id="language-select" role="combobox" tabindex="0">
+                  C++
+                 </div>
+                 <input aria-hidden="true" aria-invalid="false" class="MuiSelect-nativeInput css-147e5lo" tabindex="-1" value="C++"/>
+                 <fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-5v2ak0">
+                  <legend class="css-w4cd9x">
+                   <span aria-hidden="true" class="notranslate">
+                    ​
+                   </span>
+                  </legend>
+                 </fieldset>
+                </div>
+               </div>
+              </div>
+              <ul class="_settings_1fs8l_2 _dark_1fs8l_71">
+               <li>
+                <div aria-label="Format code" class="css-1eiukdk _icon__container_1fs8l_16">
+                 <i class="_beautify__icon_1fs8l_29">
+                 </i>
+                </div>
+               </li>
+               <li>
+                <div aria-label="Download code" class="css-1eiukdk _icon__container_1fs8l_16">
+                 <i class="_download__icon_1fs8l_35">
+                 </i>
+                </div>
+               </li>
+               <li>
+                <div aria-label="Reset code" class="css-1eiukdk _icon__container_1fs8l_16">
+                 <i class="_reset__icon_1fs8l_41">
+                 </i>
+                </div>
+               </li>
+               <li>
+                <div aria-label="Settings" class="css-1eiukdk _icon__container_1fs8l_16">
+                 <i class="_settings__icon_1fs8l_53">
+                 </i>
+                </div>
+               </li>
+               <li>
+                <div aria-label="Go fullscreen" class="css-1eiukdk _icon__container_1fs8l_16">
+                 <i class="_fullscreen__icon_1fs8l_59 _dark_1fs8l_71">
+                 </i>
+                </div>
+               </li>
+              </ul>
+             </div>
+             <div class="_ideEditorWrapper_1g5qp_175 _dark_1g5qp_55" style="height: calc(-290px + 100vh);">
+              <div aria-hidden="true" class="MuiBackdrop-root _ide-overlay__backdrop_1g5qp_190 css-11m57ox" style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);">
+              </div>
+              <span class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary _ide-overlay__progress_1g5qp_183 css-14awfyb" role="progressbar" style="width: 40px; height: 40px;">
+              </span>
+              <div class="ace_editor ace_hidpi _ide__editor_1g5qp_218 ace-tomorrow-night ace_dark" id="submit-ide-v2" style="width: 500px; height: 100%; font-size: 14px;">
+               <textarea aria-autocomplete="both" aria-haspopup="false" aria-label="Cursor at row 1" autocapitalize="off" autocorrect="off" class="ace_text-input" role="textbox" spellcheck="false" style="opacity: 0; font-size: 1px; height: 1px; width: 1px; transform: translate(45px, 34px);" wrap="off"></textarea>
+               <div aria-hidden="true" class="ace_gutter" style="left: 0px; width: 42px;">
+                <div class="ace_layer ace_gutter-layer ace_folding-enabled" style="height: 1e+06px; transform: translate(0px, 16px); width: 42px;">
+                 <div aria-hidden="true" class="ace_gutter-cell ace_gutter-active-line" style="height: 18px; top: 0px;">
+                  1
+                  <span style="display: none;" tabindex="0">
+                  </span>
+                  <span style="display: none;" tabindex="0">
+                   <span>
+                   </span>
+                  </span>
+                 </div>
+                </div>
+               </div>
+               <div class="ace_scroller" style="line-height: 18px; left: 41.4004px; right: 0px; bottom: 0px;">
+                <div class="ace_content" style="transform: translate(0px, 16px); width: 591.6px; height: 423px;">
+                 <div class="ace_layer ace_print-margin-layer">
+                  <div class="ace_print-margin" style="left: 676px; visibility: hidden;">
+                  </div>
+                 </div>
+                 <div class="ace_layer ace_marker-layer">
+                  <div class="ace_active-line" style="height: 18px; top: 0px; left: 0px; right: 0px;">
+                  </div>
+                 </div>
+                 <div class="ace_layer ace_text-layer" style="height: 1e+06px; margin: 0px 4px; transform: translate(0px, 0px);">
+                  <div class="ace_line_group" style="height: 18px; top: 0px;">
+                   <div class="ace_line" style="height: 18px;">
+                   </div>
+                  </div>
+                 </div>
+                 <div class="ace_layer ace_marker-layer">
+                 </div>
+                 <div class="ace_layer ace_cursor-layer ace_hidden-cursors">
+                  <div class="ace_cursor" style="display: block; transform: translate(4px, 0px); width: 8px; height: 18px;">
+                  </div>
+                 </div>
+                </div>
+                <div class="ace_comment ace_placeholder" style="padding: 0px 9px; position: absolute; z-index: 3;">
+                 Enter your code here
+                </div>
+               </div>
+               <div class="ace_scrollbar ace_scrollbar-v" style="display: none; width: 20px; height: 387px; bottom: 0px;">
+                <div class="ace_scrollbar-inner" style="width: 20px; height: 50px;">
+                </div>
+               </div>
+               <div class="ace_scrollbar ace_scrollbar-h" style="display: none; height: 20px; left: 41.4004px; right: 0px; width: 591.6px;">
+                <div class="ace_scrollbar-inner" style="height: 20px; width: 633px;">
+                </div>
+               </div>
+               <div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: hidden;">
+                <div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;">
+                 הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+                </div>
+                <div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; overflow: visible;">
+                 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                </div>
+               </div>
+               <div class="ace_tooltip" role="tooltip" style="display: none; pointer-events: auto;">
+               </div>
+              </div>
+             </div>
+            </div>
+            <div class="_ide-execute__wrapper_r2w6z_20">
+             <div class="_ideExecuteWrapperRef_yibw2_2 _dark_yibw2_12">
+              <div class="_ideExecuteWrapperComponents_yibw2_15">
+               <div class="_testcaseContainer_yibw2_411 _dark_yibw2_12">
+                <div class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation1 MuiAccordion-root Mui-expanded MuiAccordion-gutters _accordion_yibw2_414 css-1sh2c7f" style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);">
+                 <h3 class="MuiAccordion-heading css-wnfue5">
+                  <button aria-expanded="true" class="MuiButtonBase-root MuiAccordionSummary-root jss25 Mui-expanded jss28 MuiAccordionSummary-gutters _accordion__summary_yibw2_419 css-3pzm2w" tabindex="0" type="button">
+                   <span class="MuiAccordionSummary-content jss26 Mui-expanded jss28 MuiAccordionSummary-contentGutters css-1b8uc0m">
+                    <span>
+                     Test against Custom Input
+                    </span>
+                   </span>
+                   <span class="MuiAccordionSummary-expandIconWrapper Mui-expanded jss28 css-f8wb7g">
+                   </span>
+                  </button>
+                 </h3>
+                 <div class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered css-1cbf1l2" style="min-height: 0px;">
+                  <div class="MuiCollapse-wrapper MuiCollapse-vertical css-15830to">
+                   <div class="MuiCollapse-wrapperInner MuiCollapse-vertical css-9vd5ud">
+                    <div class="MuiAccordion-region" role="region">
+                     <div class="MuiAccordionDetails-root _accordion__details_yibw2_425 css-l9xe8y">
+                      <textarea class="_textarea_yibw2_430" placeholder="Your program will run with no input" style="margin: 10px 0px; resize: none; height: 100px; background: rgb(255, 255, 255); border: 1px solid rgb(232, 236, 244); border-radius: 4px;">3 
+12345
+31203
+2123
+</textarea>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <div>
+               </div>
+              </div>
+              <div class="_runContainer_yibw2_125 _dark_yibw2_12">
+               <div class="_leftContainer_yibw2_155">
+                <div style="text-align: center;">
+                 <div class="_codeVisualizer_yibw2_49 _dark_yibw2_12">
+                  <i class="_eyeIcon_yibw2_62 _dark_yibw2_12">
+                  </i>
+                  <span class="_text_yibw2_94 _dark_yibw2_12">
+                   Visualize Code
+                  </span>
+                 </div>
+                </div>
+               </div>
+               <div class="_execute-btn-container_yibw2_215">
+                <div class="_execute-btn-actions_yibw2_238">
+                 <button class="css-1eiukdk _compile__btn_yibw2_294" id="compile_btn" type="button">
+                  <span class="_btn__text_yibw2_317">
+                   Run
+                  </span>
+                 </button>
+                 <button class="css-1eiukdk _submit__btn_yibw2_333 _dark_yibw2_12" id="submit_btn" type="button">
+                  Submit
+                 </button>
+                </div>
+               </div>
+              </div>
+              <div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div data-client_id="239412980790-t66g30lvvdcs9u1q0l8tha23599ltt1j.apps.googleusercontent.com" data-login_uri="https://www.codechef.com/onetap" id="g_id_onload">
+  </div>
+  <div style="top: 0px; left: 0px; position: fixed; display: none; place-items: center; height: 100vh; width: 100vw; z-index: 10000; line-height: 1.5; font-size: 16px; backdrop-filter: blur(2px); background: rgba(0, 0, 0, 0.1); box-sizing: border-box;">
+  </div>
+ </body>
+</html>
