@@ -18,8 +18,9 @@ uv run cpfetch setup
 ```
 
 > [!NOTE]
-> `cpfetch setup` installs Patchright's Chromium browser.
-> If you wish to remove it later, you have to run `uv run patchright uninstall chromium`.
+> `cpfetch setup` installs Patchright's Chromium browser (without system dependencies).
+> If system libraries are missing, install them manually or run `uv run patchright install --with-deps chromium` once as root.
+> If you wish to remove the browser later, run `uv run patchright uninstall chromium`.
 
 ## Usage
 

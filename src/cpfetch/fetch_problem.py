@@ -76,7 +76,7 @@ def setup() -> None:
     """Install Patchright Chromium browser."""
     try:
         subprocess.check_call(
-            [sys.executable, "-m", "patchright", "install", "--with-deps", "chromium"],
+            [sys.executable, "-m", "patchright", "install", "chromium"],
         )
     except subprocess.CalledProcessError as exc:
         print(f"error: patchright install failed: {exc}", file=sys.stderr)
