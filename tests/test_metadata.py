@@ -1,6 +1,7 @@
 import json
 from unittest.mock import MagicMock, patch
 
+import pytest
 from bs4 import BeautifulSoup
 
 from cpfetch.cp_metadata import (
@@ -13,6 +14,7 @@ from cpfetch.cp_metadata import (
     site_from_url,
     slugify,
 )
+from cpfetch.cpparse import get_parser
 from cpfetch.cpparse.fetch import BrowserFetch
 from cpfetch.cpparse.lib import (
     BaseParser,
@@ -852,3 +854,76 @@ class TestBrowserFetchDispatch:
         headless_ctx.add_cookies.assert_called_once()
         cookie_names = {c["name"] for c in headless_ctx.add_cookies.call_args[0][0]}
         assert cookie_names == {"cf_clearance", "__cf_bm"}
+
+
+class TestFetcherInjection:
+    """Verify that BrowserFetch is injected into parsers and shared across calls."""
+
+    def test_get_parser_passes_fetcher(self) -> None:
+        fetcher = BrowserFetch()
+        parser = get_parser("https://codeforces.com/problemset/problem/1/A", fetcher)
+        assert parser is not None
+        assert parser._fetcher is fetcher
+
+    def test_get_parser_without_fetcher_defaults_to_none(self) -> None:
+        parser = get_parser("https://codeforces.com/problemset/problem/1/A")
+        assert parser is not None
+        assert parser._fetcher is None
+
+    def test_fetch_page_raises_without_fetcher(self) -> None:
+        parser = CodeforcesParser()
+        with pytest.raises(RuntimeError):
+            _ = parser.fetch_page("https://codeforces.com/problemset/problem/1/A")
+
+    def test_multiple_parsers_share_one_fetcher(self) -> None:
+        fetcher = BrowserFetch()
+        p1 = get_parser("https://codeforces.com/problemset/problem/1/A", fetcher)
+        p2 = get_parser("https://cses.fi/problemset/task/1083", fetcher)
+        assert p1 is not None and p2 is not None
+        assert p1._fetcher is fetcher
+        assert p2._fetcher is fetcher
+
+
+class TestBrowserFetchContextManager:
+    """Verify BrowserFetch context manager protocol."""
+
+    def test_context_manager_closes_on_exit(self) -> None:
+        fetcher = BrowserFetch()
+        with patch.object(fetcher, "close") as mock_close, fetcher:
+            pass
+        mock_close.assert_called_once()
+
+    def test_context_manager_returns_self(self) -> None:
+        fetcher = BrowserFetch()
+        with fetcher as ctx:
+            assert ctx is fetcher
+
+
+class TestBrowserFetchRetry:
+    """Verify that transient failures are retried with backoff."""
+
+    def test_retries_on_failure_then_succeeds(self) -> None:
+        fetcher = BrowserFetch()
+        ctx = MagicMock()
+        page = MagicMock()
+        page.content.return_value = "<html>ok</html>"
+        ctx.new_page.return_value = page
+        with (
+            patch.object(fetcher, "_ensure_headless", return_value=(MagicMock(), ctx)),
+            patch.object(fetcher, "_fetch_once", side_effect=[TimeoutError, "<html>ok</html>"]),
+            patch("cpfetch.cpparse.fetch.time.sleep"),
+        ):
+            result = fetcher.fetch("https://example.com", "#content")
+        assert result == "<html>ok</html>"
+
+    def test_exhausts_retries_then_returns_none(self) -> None:
+        fetcher = BrowserFetch()
+        ctx = MagicMock()
+        ctx.new_page.return_value = MagicMock()
+        with (
+            patch.object(fetcher, "_ensure_headless", return_value=(MagicMock(), ctx)),
+            patch.object(fetcher, "_fetch_once", side_effect=TimeoutError),
+            patch("cpfetch.cpparse.fetch.time.sleep"),
+        ):
+            result = fetcher.fetch("https://example.com", "#content")
+        assert result is None

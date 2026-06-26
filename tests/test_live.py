@@ -3,6 +3,7 @@ import os
 import pytest
 
 from cpfetch.cpparse import get_parser
+from cpfetch.cpparse.fetch import BrowserFetch
 
 # (site, url, expected_name, time_limit_ms, memory_limit_mb, sample_count)
 SITES = [
@@ -72,18 +73,19 @@ def test_live_fetch(
     count: int,
 ) -> None:
     """Smoke test: fetch and parse a known live problem, verifying full metadata."""
-    parser = get_parser(url)
-    assert parser is not None
-    data = parser.parse(url)
-    assert data is not None, f"{site}: parse returned None"
-    assert data.name == expected_name, f"{site}: expected {expected_name!r}, got {data.name!r}"
-    assert data.time_limit == time
-    assert data.memory_limit == mem
-    assert data.url == url
-    assert data.site == site
-    assert len(data.body_html) > 0
-    assert len(data.samples) == count
-    for i, sample in enumerate(data.samples):
-        assert sample.input.strip(), f"sample[{i}] input is empty"
-        assert sample.output.strip(), f"sample[{i}] output is empty"
-    assert len(data.math) > 0
+    with BrowserFetch() as fetcher:
+        parser = get_parser(url, fetcher)
+        assert parser is not None
+        data = parser.parse(url)
+        assert data is not None, f"{site}: parse returned None"
+        assert data.name == expected_name, f"{site}: expected {expected_name!r}, got {data.name!r}"
+        assert data.time_limit == time
+        assert data.memory_limit == mem
+        assert data.url == url
+        assert data.site == site
+        assert len(data.body_html) > 0
+        assert len(data.samples) == count
+        for i, sample in enumerate(data.samples):
+            assert sample.input.strip(), f"sample[{i}] input is empty"
+            assert sample.output.strip(), f"sample[{i}] output is empty"
+        assert len(data.math) > 0

@@ -13,7 +13,7 @@ from bs4.element import NavigableString, Tag
 from markdownify import markdownify
 
 from ..cp_metadata import MathExtractor, ProblemData, SampleCase, restore_math
-from .fetch import browser_fetch
+from .fetch import BrowserFetch
 
 
 def space_latex_commands(text: str) -> str:
@@ -114,6 +114,9 @@ class BaseParser:
     headless: bool = True
     _strip_trailing: bool = True
 
+    def __init__(self, fetcher: BrowserFetch | None = None) -> None:
+        self._fetcher = fetcher
+
     _TIME_MS_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(ms|milliseconds?)\b", re.IGNORECASE)
     _TIME_S_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(seconds?|secs|sec|s)\b", re.IGNORECASE)
     _MEM_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(gigabytes?|GiB|GB|megabytes?|MiB|MB)\b", re.IGNORECASE)
@@ -181,7 +184,9 @@ class BaseParser:
 
     def fetch_page(self, url: str) -> str | None:
         """Fetch the problem page HTML via the browser and return it."""
-        return browser_fetch.fetch(url, self.selector, headless=self.headless)
+        if self._fetcher is None:
+            raise RuntimeError("No BrowserFetch injected; construct the parser via get_parser(url, fetcher).")
+        return self._fetcher.fetch(url, self.selector, headless=self.headless)
 
     def extract_name(self, soup: BeautifulSoup) -> str | None:
         """Extract the problem title from the full-page soup. Subclasses override."""

@@ -38,42 +38,43 @@ def _scrub_html(html: str) -> str:
 
 def _regenerate_fixtures(filter_key: str, mode: str) -> None:
     from cpfetch.cpparse import get_parser
-    from cpfetch.cpparse.fetch import browser_fetch
+    from cpfetch.cpparse.fetch import BrowserFetch
 
     entries = _resolve_entries(filter_key)
 
-    for site, url, slug in entries:
-        parser = get_parser(url)
-        assert parser is not None
+    with BrowserFetch() as fetcher:
+        for site, url, slug in entries:
+            parser = get_parser(url, fetcher)
+            assert parser is not None
 
-        if mode in ("all", "html"):
-            html = browser_fetch.fetch(url, parser.selector, headless=parser.headless)
-            if html is None:
-                pytest.exit(f"Failed to fetch {url}", returncode=1)
-            html = _scrub_html(html)
-            html_path = FIXTURES_DIR / site / f"{slug}.html"
-            html_path.write_text(html, encoding="utf-8")
-            print(f"Regenerated {html_path}")
-        else:
-            html = (FIXTURES_DIR / site / f"{slug}.html").read_text(encoding="utf-8")
+            if mode in ("all", "html"):
+                html = fetcher.fetch(url, parser.selector, headless=parser.headless)
+                if html is None:
+                    pytest.exit(f"Failed to fetch {url}", returncode=1)
+                html = _scrub_html(html)
+                html_path = FIXTURES_DIR / site / f"{slug}.html"
+                html_path.write_text(html, encoding="utf-8")
+                print(f"Regenerated {html_path}")
+            else:
+                html = (FIXTURES_DIR / site / f"{slug}.html").read_text(encoding="utf-8")
 
-        if mode in ("all", "json"):
-            data = parser.extract_data(html, url)
-            assert data is not None
-            snapshot = {
-                "name": data.name,
-                "site": data.site,
-                "platform": data.platform,
-                "url": data.url,
-                "time_limit": data.time_limit,
-                "memory_limit": data.memory_limit,
-                "body_html": data.body_html,
-                "samples": [{"input": s.input, "output": s.output} for s in data.samples],
-                "math_values": list(dict.fromkeys(data.math.values())),
-            }
-            json_path = FIXTURES_DIR / site / f"{slug}.json"
-            json_path.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-            print(f"Regenerated {json_path}")
+            if mode in ("all", "json"):
+                data = parser.extract_data(html, url)
+                assert data is not None
+                snapshot = {
+                    "name": data.name,
+                    "site": data.site,
+                    "platform": data.platform,
+                    "url": data.url,
+                    "time_limit": data.time_limit,
+                    "memory_limit": data.memory_limit,
+                    "body_html": data.body_html,
+                    "samples": [{"input": s.input, "output": s.output} for s in data.samples],
+                    "math_values": list(dict.fromkeys(data.math.values())),
+                }
+                json_path = FIXTURES_DIR / site / f"{slug}.json"
+                json_path.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+                print(f"Regenerated {json_path}")
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:

@@ -7,6 +7,7 @@ Batch refetch: cpfetch --all
 """
 
 import argparse
+import logging
 import subprocess
 import sys
 from pathlib import Path
@@ -18,6 +19,9 @@ from cpfetch.cp_metadata import (
     slugify,
 )
 from cpfetch.cpparse import get_parser, render_markdown
+from cpfetch.cpparse.fetch import BrowserFetch
+
+_log = logging.getLogger(__name__)
 
 
 def write_samples(tests_dir: Path, samples: list[SampleCase]) -> None:
@@ -33,24 +37,16 @@ def write_samples(tests_dir: Path, samples: list[SampleCase]) -> None:
         _ = (tests_dir / f"{i:02d}.out").write_text(sample.output, encoding="utf-8")
 
 
-def process_url(url: str, out_dir: Path, nest: bool) -> str | None:
+def process_url(url: str, out_dir: Path, nest: bool, fetcher: BrowserFetch) -> str | None:
     """Fetch problem, render markdown, write artifacts. Returns output dir path or None."""
-    parser = get_parser(url)
+    parser = get_parser(url, fetcher)
     if parser is None:
-        print(
-            f"error: unsupported platform for URL: {url}",
-            file=sys.stderr,
-            flush=True,
-        )
+        _log.error("unsupported platform for URL: %s", url)
         return None
 
     data = parser.parse(url)
     if data is None:
-        print(
-            f"error: failed to fetch: {url}",
-            file=sys.stderr,
-            flush=True,
-        )
+        _log.error("failed to fetch: %s", url)
         return None
 
     if nest:
@@ -68,7 +64,7 @@ def process_url(url: str, out_dir: Path, nest: bool) -> str | None:
 
     save_meta_json(output_dir, data)
 
-    print(f"saved: {output_dir}", file=sys.stderr, flush=True)
+    _log.info("saved: %s", output_dir)
     return str(output_dir)
 
 
@@ -79,12 +75,14 @@ def setup() -> None:
             [sys.executable, "-m", "patchright", "install", "chromium"],
         )
     except subprocess.CalledProcessError as exc:
-        print(f"error: patchright install failed: {exc}", file=sys.stderr)
+        _log.error("patchright install failed: %s", exc)
         sys.exit(1)
 
 
 def main() -> None:
     """Entry point: parse CLI arguments and dispatch to the appropriate action."""
+    logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stderr)
+
     parser = argparse.ArgumentParser(description="Fetch problem data and render problem.md")
     subparsers = parser.add_subparsers(dest="command")
     _ = subparsers.add_parser("setup", help="install Patchright Chromium browser")
@@ -125,61 +123,52 @@ def main() -> None:
         return
 
     if args.all and args.url:
-        print("error: --all and --url are mutually exclusive", file=sys.stderr)
+        _log.error("--all and --url are mutually exclusive")
         sys.exit(1)
 
     if args.all:
         root = Path(args.problems_dir).resolve()
         if not root.is_dir():
-            print(f"error: problems root not found: {root}", file=sys.stderr)
+            _log.error("problems root not found: %s", root)
             sys.exit(1)
         failures = 0
         meta_paths = sorted(root.glob("**/meta.json"))
         total = len(meta_paths)
-        for i, meta_path in enumerate(meta_paths, 1):
-            print(
-                f"({i}/{total}) processing {meta_path.parent}",
-                file=sys.stderr,
-                flush=True,
-            )
-            url = load_meta_url(meta_path.parent)
-            if url is None:
-                print(
-                    f"error: invalid meta.json in {meta_path.parent}",
-                    file=sys.stderr,
-                )
-                failures += 1
-                continue
-            result = process_url(url, meta_path.parent, nest=False)
-            if result is None:
-                failures += 1
+        with BrowserFetch() as fetcher:
+            for i, meta_path in enumerate(meta_paths, 1):
+                _log.info("(%d/%d) processing %s", i, total, meta_path.parent)
+                url = load_meta_url(meta_path.parent)
+                if url is None:
+                    _log.error("invalid meta.json in %s", meta_path.parent)
+                    failures += 1
+                    continue
+                result = process_url(url, meta_path.parent, nest=False, fetcher=fetcher)
+                if result is None:
+                    failures += 1
         if failures:
-            print(
-                f"error: {failures} problem(s) failed",
-                file=sys.stderr,
-                flush=True,
-            )
+            _log.error("%d problem(s) failed", failures)
             sys.exit(1)
         return
 
     if not args.url:
-        print("error: specify --url or --all", file=sys.stderr)
+        _log.error("specify --url or --all")
         sys.exit(1)
 
     urls: list[str] = args.url
     if len(urls) > 1 and not args.nest:
-        print("error: multiple --url requires --nest", file=sys.stderr)
+        _log.error("multiple --url requires --nest")
         sys.exit(1)
 
     out_dir = Path(args.out_dir).resolve()
     failures = 0
     results: list[str] = []
-    for url in urls:
-        result = process_url(url, out_dir, args.nest)
-        if result is None:
-            failures += 1
-        else:
-            results.append(result)
+    with BrowserFetch() as fetcher:
+        for url in urls:
+            result = process_url(url, out_dir, args.nest, fetcher)
+            if result is None:
+                failures += 1
+            else:
+                results.append(result)
     if results:
         for path in results:
             print(path)

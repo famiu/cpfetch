@@ -48,7 +48,10 @@ indent-style = "space"
 docstring-code-format = true
 
 [tool.ruff.lint]
-ignore = ["D107"]
+ignore = [
+    "D107",    # undocumented-public-class
+    "TRY003",  # raise-vanilla-args
+]
 
 select = [
     "D",
