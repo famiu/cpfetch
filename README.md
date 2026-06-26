@@ -26,21 +26,21 @@ uv run cpfetch setup
 
 ```sh
 # Fetch a problem
-uv run cpfetch --url https://cses.fi/problemset/task/1083
+uv run cpfetch fetch https://cses.fi/problemset/task/1083
 
 # Fetch into a specific directory
-uv run cpfetch --url https://codeforces.com/problemset/problem/1/A --out-dir problems
+uv run cpfetch fetch https://codeforces.com/problemset/problem/1/A --out-dir problems
 
 # Fetch multiple problems at once (requires --nest to avoid overwriting)
-uv run cpfetch --url https://cses.fi/problemset/task/1083 \
-               --url https://atcoder.jp/contests/abc233/tasks/abc233_a \
-               --out-dir problems --nest
+uv run cpfetch fetch https://cses.fi/problemset/task/1083 \
+                     https://atcoder.jp/contests/abc233/tasks/abc233_a \
+                     --out-dir problems --nest
 
 # Create {site}/{slug} subdirectory under --out-dir
-uv run cpfetch --url https://atcoder.jp/contests/abc233/tasks/abc233_a --out-dir problems --nest
+uv run cpfetch fetch https://atcoder.jp/contests/abc233/tasks/abc233_a --out-dir problems --nest
 
 # Batch re-fetch all problems with meta.json under a directory
-uv run cpfetch --all --problems-dir problems
+uv run cpfetch refetch --problems-dir problems
 ```
 
 > [!NOTE]
@@ -48,7 +48,7 @@ uv run cpfetch --all --problems-dir problems
 > On a headless server, wrap with `xvfb-run`:
 >
 > ```sh
-> xvfb-run uv run cpfetch --url https://www.spoj.com/problems/TEST/
+> xvfb-run uv run cpfetch fetch https://www.spoj.com/problems/TEST/
 > ```
 
 ## Output
