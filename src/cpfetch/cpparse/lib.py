@@ -28,7 +28,7 @@ def space_latex_commands(text: str) -> str:
     return re.sub(r"\\(\w+)(?=\s)", r"\\\1{}", text)
 
 
-def classify_section_heading(text: str) -> bool:
+def is_section_heading(text: str) -> bool:
     """Return True if *text* looks like a section heading (Input, Constraints, etc.)."""
     text = text.strip().lower().rstrip(":")
     prefixes = (
@@ -49,7 +49,7 @@ def classify_section_heading(text: str) -> bool:
 
 def _normalize_section_headings(soup: BeautifulSoup) -> None:
     for tag in soup.find_all(["h1", "h2", "h3", "h4"]):
-        if classify_section_heading(tag.get_text()):
+        if is_section_heading(tag.get_text()):
             tag.name = "h2"
 
 
@@ -241,14 +241,24 @@ class BaseParser:
 def fmt_time(ms: float) -> str:
     """Format a time in milliseconds as a human-readable string (e.g. '1.5 s')."""
     ms = max(0.0, ms)
-    return f"{ms / 1000:g} s"
+    seconds = ms / 1000
+    formatted = f"{seconds:g}"
+    if "e" in formatted:
+        return f"{ms:g} ms"
+    return f"{formatted} s"
 
 
 def as_code_block(text: str) -> str:
     """Wrap *text* in a Markdown code fence, adjusting the fence length if needed."""
-    fence = "```"
-    while fence in text:
-        fence += "`"
+    max_run = 0
+    current = 0
+    for ch in text:
+        if ch == "`":
+            current += 1
+            max_run = max(max_run, current)
+        else:
+            current = 0
+    fence = "`" * max(3, max_run + 1)
     return f"{fence}\n{text}\n{fence}"
 
 
@@ -259,7 +269,7 @@ def render_markdown(data: ProblemData) -> str:
         limits.append(f"**Time limit:** {fmt_time(data.time_limit)}")
     if data.memory_limit is not None:
         limits.append(f"**Memory limit:** {data.memory_limit} MB")
-    limits.append(f"**Platform**: {data.platform}")
+    limits.append(f"**Platform:** {data.platform}")
 
     limits_str = " | ".join(limits)
     body_md = markdownify(data.body_html, heading_style="ATX").strip()

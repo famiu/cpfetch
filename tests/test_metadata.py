@@ -22,8 +22,8 @@ from cpfetch.cpparse.fetch import BrowserFetch
 from cpfetch.cpparse.lib import (
     BaseParser,
     as_code_block,
-    classify_section_heading,
     fmt_time,
+    is_section_heading,
     render_markdown,
     space_latex_commands,
 )
@@ -188,49 +188,49 @@ class TestSpaceLatexCommands:
         assert space_latex_commands(r"abc \le") == r"abc \le"
 
 
-class TestClassifySectionHeading:
+class TestIsSectionHeading:
     def test_input(self):
-        assert classify_section_heading("Input") is True
+        assert is_section_heading("Input") is True
 
     def test_output(self):
-        assert classify_section_heading("Output") is True
+        assert is_section_heading("Output") is True
 
     def test_constraints(self):
-        assert classify_section_heading("Constraints") is True
+        assert is_section_heading("Constraints") is True
 
     def test_sample(self):
-        assert classify_section_heading("Sample 1") is True
+        assert is_section_heading("Sample 1") is True
 
     def test_example(self):
-        assert classify_section_heading("Example") is True
+        assert is_section_heading("Example") is True
 
     def test_note(self):
-        assert classify_section_heading("Note") is True
+        assert is_section_heading("Note") is True
 
     def test_scoring(self):
-        assert classify_section_heading("Scoring") is True
+        assert is_section_heading("Scoring") is True
 
     def test_editorial(self):
-        assert classify_section_heading("Editorial") is True
+        assert is_section_heading("Editorial") is True
 
     def test_hint(self):
-        assert classify_section_heading("Hint") is True
+        assert is_section_heading("Hint") is True
 
     def test_explanation(self):
-        assert classify_section_heading("Explanation") is True
+        assert is_section_heading("Explanation") is True
 
     def test_case_insensitive(self):
-        assert classify_section_heading("input") is True
-        assert classify_section_heading("INPUT") is True
+        assert is_section_heading("input") is True
+        assert is_section_heading("INPUT") is True
 
     def test_strips_colon(self):
-        assert classify_section_heading("Input:") is True
+        assert is_section_heading("Input:") is True
 
     def test_generic_text(self):
-        assert classify_section_heading("Some random heading") is False
+        assert is_section_heading("Some random heading") is False
 
     def test_empty_string(self):
-        assert classify_section_heading("") is False
+        assert is_section_heading("") is False
 
 
 class TestAsCodeBlock:
@@ -253,6 +253,10 @@ class TestAsCodeBlock:
     def test_trailing_text_stays(self):
         result = as_code_block("hello\n")
         assert result == "```\nhello\n\n```"
+
+    def test_longer_backtick_run(self):
+        result = as_code_block("````")
+        assert result == "`````\n````\n`````"
 
 
 class TestParseTimeLimit:
@@ -316,6 +320,11 @@ class TestFmtTime:
 
     def test_negative_clamped(self) -> None:
         assert fmt_time(-100.0) == "0 s"
+
+    def test_sub_ms_avoids_sci_notation(self) -> None:
+        result = fmt_time(0.0001)
+        assert "e" not in result
+        assert "ms" in result
 
 
 class TestRenderMarkdownEdgeCases:
