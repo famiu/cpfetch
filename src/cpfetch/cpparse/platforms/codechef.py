@@ -9,7 +9,7 @@ source. The surrounding KaTeX visual markup (aria-hidden spans) must be ignored 
 concatenating visual-rendering text into the math output.
 
 Practice problems have a public JSON API at /api/contests/PRACTICE/problems/<CODE> that provides
-structured sampleTestCases. We replace the Playwright-scraped samples with API data for
+structured sampleTestCases. We replace the Patchright-scraped samples with API data for
 practice problems, since the API is the authoritative source for sample test cases.
 """
 

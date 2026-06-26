@@ -12,22 +12,14 @@ opening another visible window.
 import atexit
 import contextlib
 import os
-import platform as _platform
 import sys
 import time
 
-from patchright.sync_api import Browser, BrowserContext, Playwright, sync_playwright
+from patchright.sync_api import Browser, BrowserContext
+from patchright.sync_api import Playwright as Driver
+from patchright.sync_api import sync_playwright as sync_driver
 
-
-def _default_user_agent() -> str:
-    system = _platform.system()
-    if system == "Darwin":
-        os_token = "Macintosh; Intel Mac OS X 10_15_7"
-    elif system == "Windows":
-        os_token = "Windows NT 10.0; Win64; x64"
-    else:
-        os_token = "X11; Linux x86_64"
-    return f"Mozilla/5.0 ({os_token}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+_INIT_SCRIPT = 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
 
 
 def _launch_args() -> list[str]:
@@ -35,6 +27,27 @@ def _launch_args() -> list[str]:
     if hasattr(os, "geteuid") and os.geteuid() == 0:
         args.insert(0, "--no-sandbox")
     return args
+
+
+def _derive_user_agent(browser: Browser) -> str:
+    """Read the bundled Chromium's default UA and strip the `Headless` token.
+
+    A `HeadlessChrome` UA is blocked by some CDNs (e.g. Codeforces). Deriving
+    the UA from the actual browser build guarantees the version string matches
+    the installed Chromium instead of drifting against a hardcoded value.
+    """
+    ctx = browser.new_context()
+    try:
+        page = ctx.new_page()
+        try:
+            page.goto("about:blank")
+            raw = page.evaluate("() => navigator.userAgent")
+        finally:
+            page.close()
+    finally:
+        with contextlib.suppress(Exception):
+            ctx.close()
+    return raw.replace("HeadlessChrome", "Chrome")
 
 
 class BrowserFetch:
@@ -47,22 +60,26 @@ class BrowserFetch:
     """
 
     def __init__(self) -> None:
-        self._playwright: Playwright | None = None
+        self._driver: Driver | None = None
         self._browser: Browser | None = None
         self._context: BrowserContext | None = None
+        self._user_agent: str | None = None
 
-    def _ensure_headless(self) -> tuple[Playwright, BrowserContext]:
+    def _ensure_headless(self) -> tuple[Driver, BrowserContext]:
         if self._context is not None:
-            assert self._playwright is not None
-            return self._playwright, self._context
-        if self._playwright is None:
-            self._playwright = sync_playwright().start()
-        self._browser = self._playwright.chromium.launch(
+            if self._driver is None:
+                raise RuntimeError
+            return self._driver, self._context
+        if self._driver is None:
+            self._driver = sync_driver().start()
+        self._browser = self._driver.chromium.launch(
             headless=True,
             args=_launch_args(),
         )
-        self._context = self._browser.new_context(user_agent=_default_user_agent())
-        return self._playwright, self._context
+        if self._user_agent is None:
+            self._user_agent = _derive_user_agent(self._browser)
+        self._context = self._browser.new_context(user_agent=self._user_agent)
+        return self._driver, self._context
 
     def _has_cf_clearance(self, ctx: BrowserContext, url: str) -> bool:
         cookies = ctx.cookies(url)
@@ -74,14 +91,12 @@ class BrowserFetch:
                     return True
         return False
 
-    def _fetch_headed_and_seed(self, pw: Playwright, ctx: BrowserContext, url: str, selector: str) -> str:
+    def _fetch_headed_and_seed(self, pw: Driver, ctx: BrowserContext, url: str, selector: str) -> str:
         browser = pw.chromium.launch(headless=False, args=_launch_args())
-        temp_ctx = browser.new_context(user_agent=_default_user_agent())
+        temp_ctx = browser.new_context(user_agent=self._user_agent or _derive_user_agent(browser))
         try:
             page = temp_ctx.new_page()
-            page.add_init_script(
-                'Object.defineProperty(navigator, "webdriver", ' + "{get: () => undefined})",
-            )
+            page.add_init_script(_INIT_SCRIPT)
             page.goto(url, wait_until="domcontentloaded", timeout=30_000)
             page.wait_for_selector(selector, timeout=30_000)
             html = page.content()
@@ -123,9 +138,7 @@ class BrowserFetch:
                 return self._fetch_headed_and_seed(pw, ctx, url, selector)
             page = ctx.new_page()
             try:
-                page.add_init_script(
-                    'Object.defineProperty(navigator, "webdriver", ' + "{get: () => undefined})",
-                )
+                page.add_init_script(_INIT_SCRIPT)
                 page.goto(url, wait_until="domcontentloaded", timeout=30_000)
                 page.wait_for_selector(selector, timeout=30_000)
                 return page.content()
@@ -140,7 +153,7 @@ class BrowserFetch:
             return None
 
     def cleanup(self) -> None:
-        """Close the cached context and browser and stop Patchright if running."""
+        """Close the cached context and browser and stop the driver if running."""
         if self._context is not None:
             with contextlib.suppress(Exception):
                 self._context.close()
@@ -149,10 +162,10 @@ class BrowserFetch:
             with contextlib.suppress(Exception):
                 self._browser.close()
             self._browser = None
-        if self._playwright is not None:
+        if self._driver is not None:
             with contextlib.suppress(Exception):
-                self._playwright.stop()
-            self._playwright = None
+                self._driver.stop()
+            self._driver = None
 
 
 browser_fetch = BrowserFetch()

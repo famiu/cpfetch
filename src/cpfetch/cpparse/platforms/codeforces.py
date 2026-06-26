@@ -1,7 +1,7 @@
 """Codeforces problem statement parser.
 
 Codeforces renders math in three possible forms:
-1. <script type="math/tex"> elements (Playwright-hydrated MathJax v2)
+1. <script type="math/tex"> elements (Patchright-hydrated MathJax v2)
 2. <span class="tex-span"> elements (static HTML)
 3. Bare $...$ delimiters inside text nodes (legacy fallback)
 
