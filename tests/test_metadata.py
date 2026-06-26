@@ -5,10 +5,12 @@ import pytest
 from bs4 import BeautifulSoup
 
 from cpfetch.cp_metadata import (
-    MathExtractor,
+    MathSentinelRegistry,
     ProblemData,
     SampleCase,
     load_meta_url,
+    parse_memory_limit,
+    parse_time_limit,
     restore_math,
     save_meta_json,
     site_from_url,
@@ -88,22 +90,22 @@ class TestSlugify:
 
 class TestRestoreMath:
     def test_single_placeholder(self):
-        result = restore_math("before XX-MATH-0-XX after", {"XX-MATH-0-XX": "$x^2$"})
+        key = "XX-MATH-0-abcdef12-XX"
+        result = restore_math(f"before {key} after", {key: "$x^2$"})
         assert result == "before $x^2$ after"
 
     def test_multiple_placeholders(self):
-        result = restore_math(
-            "a XX-MATH-0-XX b XX-MATH-1-XX c",
-            {"XX-MATH-0-XX": "$x$", "XX-MATH-1-XX": "$y$"},
-        )
+        k1 = "XX-MATH-0-abcdef12-XX"
+        k2 = "XX-MATH-1-abcdef12-XX"
+        result = restore_math(f"a {k1} b {k2} c", {k1: "$x$", k2: "$y$"})
         assert result == "a $x$ b $y$ c"
 
     def test_missing_key(self):
-        result = restore_math("XX-MATH-0-XX", {})
-        assert result == "XX-MATH-0-XX"
+        result = restore_math("XX-MATH-0-abcdef12-XX", {})
+        assert result == "XX-MATH-0-abcdef12-XX"
 
     def test_no_placeholders(self):
-        result = restore_math("hello world", {"XX-MATH-0-XX": "$x$"})
+        result = restore_math("hello world", {"XX-MATH-0-abcdef12-XX": "$x$"})
         assert result == "hello world"
 
 
@@ -143,23 +145,32 @@ class TestSaveLoadMetaUrl:
         assert load_meta_url(tmp_path) is None
 
 
-class TestMathExtractor:
+class TestMathSentinelRegistry:
     def test_add_creates_sentinel(self):
-        extractor = MathExtractor()
+        extractor = MathSentinelRegistry()
         key = extractor.add("$x^2$")
-        assert key == "XX-MATH-0-XX"
-        assert extractor.mapping == {"XX-MATH-0-XX": "$x^2$"}
+        assert key.startswith("XX-MATH-0-")
+        assert key.endswith("-XX")
+        assert extractor.mapping == {key: "$x^2$"}
 
     def test_counter_increments(self):
-        extractor = MathExtractor()
+        extractor = MathSentinelRegistry()
         k1 = extractor.add("$a$")
         k2 = extractor.add("$b$")
-        assert k1 == "XX-MATH-0-XX"
-        assert k2 == "XX-MATH-1-XX"
+        assert k1.startswith("XX-MATH-0-")
+        assert k2.startswith("XX-MATH-1-")
+        assert k1 != k2
 
     def test_empty_extractor(self):
-        extractor = MathExtractor()
+        extractor = MathSentinelRegistry()
         assert extractor.mapping == {}
+
+    def test_sentinels_have_unique_token_per_instance(self):
+        e1 = MathSentinelRegistry()
+        e2 = MathSentinelRegistry()
+        k1 = e1.add("$a$")
+        k2 = e2.add("$a$")
+        assert k1 != k2
 
 
 class TestSpaceLatexCommands:
@@ -245,48 +256,48 @@ class TestAsCodeBlock:
 
 class TestParseTimeLimit:
     def test_seconds(self) -> None:
-        assert CodeforcesParser.parse_time_limit("2 seconds") == 2000
+        assert parse_time_limit("2 seconds") == 2000
 
     def test_sec_abbrev(self) -> None:
-        assert CodeforcesParser.parse_time_limit("1 sec") == 1000
+        assert parse_time_limit("1 sec") == 1000
 
     def test_milliseconds(self) -> None:
-        assert CodeforcesParser.parse_time_limit("500 ms") == 500
+        assert parse_time_limit("500 ms") == 500
 
     def test_milliseconds_long(self) -> None:
-        assert CodeforcesParser.parse_time_limit("1500 milliseconds") == 1500
+        assert parse_time_limit("1500 milliseconds") == 1500
 
     def test_decimal_seconds(self) -> None:
-        assert CodeforcesParser.parse_time_limit("1.5 sec") == 1500
+        assert parse_time_limit("1.5 sec") == 1500
 
     def test_no_match(self) -> None:
-        assert CodeforcesParser.parse_time_limit("no time here") is None
+        assert parse_time_limit("no time here") is None
 
     def test_empty_string(self) -> None:
-        assert CodeforcesParser.parse_time_limit("") is None
+        assert parse_time_limit("") is None
 
 
 class TestParseMemoryLimit:
     def test_megabytes(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("256 MB") == 256
+        assert parse_memory_limit("256 MB") == 256
 
     def test_mebibytes(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("128 MiB") == 128
+        assert parse_memory_limit("128 MiB") == 128
 
     def test_gigabytes(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("1 GB") == 1024
+        assert parse_memory_limit("1 GB") == 1024
 
     def test_gibibytes(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("2 GiB") == 2048
+        assert parse_memory_limit("2 GiB") == 2048
 
     def test_gigabytes_long(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("1 gigabytes") == 1024
+        assert parse_memory_limit("1 gigabytes") == 1024
 
     def test_no_match(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("no memory here") is None
+        assert parse_memory_limit("no memory here") is None
 
     def test_empty_string(self) -> None:
-        assert CodeforcesParser.parse_memory_limit("") is None
+        assert parse_memory_limit("") is None
 
 
 class TestFmtTime:
@@ -334,8 +345,8 @@ class TestRenderMarkdownEdgeCases:
             time_limit=1000.0,
             memory_limit=256,
             samples=[],
-            body_html="<p>Value of XX-MATH-0-XX is important.</p>",
-            math={"XX-MATH-0-XX": "$x^2$"},
+            body_html="<p>Value of XX-MATH-0-abcdef12-XX is important.</p>",
+            math={"XX-MATH-0-abcdef12-XX": "$x^2$"},
         )
         md = render_markdown(data)
         assert "$x^2$" in md

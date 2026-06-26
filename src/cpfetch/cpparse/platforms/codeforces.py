@@ -16,19 +16,19 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-from ...cp_metadata import MathExtractor, SampleCase
+from ...cp_metadata import MathSentinelRegistry, SampleCase, parse_memory_limit, parse_time_limit
 from ..lib import BaseParser, space_latex_commands
 
 _SKIP_ANCESTORS = {"pre", "code", "script", "style"}
 
 
-def _extract_tex_span_math(soup: BeautifulSoup, extractor: MathExtractor) -> None:
+def _extract_tex_span_math(soup: BeautifulSoup, extractor: MathSentinelRegistry) -> None:
     for node in soup.select("span.tex-span"):
         text = node.get_text().strip().replace("\u2009", " ")
         _ = node.replace_with(extractor.add(f"${space_latex_commands(text)}$"))
 
 
-def _extract_mathjax_nodes(soup: BeautifulSoup, extractor: MathExtractor) -> None:
+def _extract_mathjax_nodes(soup: BeautifulSoup, extractor: MathSentinelRegistry) -> None:
     scripts = soup.select('script[type^="math/tex"]')
     if not scripts:
         return
@@ -43,7 +43,7 @@ def _extract_mathjax_nodes(soup: BeautifulSoup, extractor: MathExtractor) -> Non
         _ = script.replace_with(extractor.add(f"{delim}{processed}{delim}"))
 
 
-def _extract_raw_dollar_math(soup: BeautifulSoup, extractor: MathExtractor) -> None:
+def _extract_raw_dollar_math(soup: BeautifulSoup, extractor: MathSentinelRegistry) -> None:
     """Extract bare $...$ math by walking DOM text nodes.
 
     A global regex on the raw HTML string would corrupt the tree structure.
@@ -126,13 +126,13 @@ class CodeforcesParser(BaseParser):
             # Strip the property-title label prefix without mutating the tree.
             for pt in t_el.select(".property-title"):
                 text = text.removeprefix(pt.get_text(strip=True)).strip()
-            time_limit = self.parse_time_limit(text)
+            time_limit = parse_time_limit(text)
         m_el = header.select_one(".memory-limit")
         if m_el is not None:
             text = m_el.get_text(strip=True)
             for pt in m_el.select(".property-title"):
                 text = text.removeprefix(pt.get_text(strip=True)).strip()
-            memory_limit = self.parse_memory_limit(text)
+            memory_limit = parse_memory_limit(text)
         return time_limit, memory_limit
 
     @override
@@ -148,15 +148,15 @@ class CodeforcesParser(BaseParser):
         return letter
 
     @override
-    def extract_math(self, soup: BeautifulSoup) -> MathExtractor:
-        extractor = MathExtractor()
+    def extract_math(self, soup: BeautifulSoup) -> MathSentinelRegistry:
+        extractor = MathSentinelRegistry()
         _extract_mathjax_nodes(soup, extractor)
         _extract_tex_span_math(soup, extractor)
         _extract_raw_dollar_math(soup, extractor)
         return extractor
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = _extract_cf_samples(soup)
 
         header = soup.select_one(".problem-statement > .header")

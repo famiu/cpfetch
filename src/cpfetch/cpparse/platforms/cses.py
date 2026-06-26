@@ -12,7 +12,7 @@ from typing import override
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-from ...cp_metadata import MathExtractor, SampleCase
+from ...cp_metadata import MathSentinelRegistry, SampleCase, parse_memory_limit, parse_time_limit
 from ..lib import BaseParser, extract_math_nodes
 
 _EXAMPLE_ID_RE = re.compile(r"^example\d*$")
@@ -79,12 +79,12 @@ class CsesParser(BaseParser):
             label, _, value = text.partition(":")
             label_lower = label.strip().lower()
             if label_lower == "time limit":
-                time_limit = self.parse_time_limit(value)
+                time_limit = parse_time_limit(value)
             elif label_lower == "memory limit":
-                memory_limit = self.parse_memory_limit(value)
+                memory_limit = parse_memory_limit(value)
         return time_limit, memory_limit
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = _extract_cses_samples(soup)
         return extract_math_nodes(soup), samples

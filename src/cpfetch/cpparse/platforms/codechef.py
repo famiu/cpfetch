@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
-from ...cp_metadata import MathExtractor, ProblemData, SampleCase
+from ...cp_metadata import MathSentinelRegistry, ProblemData, SampleCase, parse_memory_limit, parse_time_limit
 from ..lib import BaseParser
 
 _SAMPLE_HEADING_RE = re.compile(r"sample\s*\d+\s*:?\s*$", re.IGNORECASE)
@@ -124,13 +124,13 @@ class CodeChefParser(BaseParser):
                 continue
             value_str = value_span.get_text(strip=True)
             if label == "time limit":
-                time_limit = self.parse_time_limit(value_str)
+                time_limit = parse_time_limit(value_str)
             else:
-                memory_limit = self.parse_memory_limit(value_str)
+                memory_limit = parse_memory_limit(value_str)
         return time_limit, memory_limit
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = _extract_codechef_samples(soup)
 
         extractor = self.extract_math(soup)

@@ -12,7 +12,7 @@ from typing import override
 
 from bs4 import BeautifulSoup
 
-from ...cp_metadata import MathExtractor, SampleCase
+from ...cp_metadata import MathSentinelRegistry, SampleCase, parse_memory_limit, parse_time_limit
 from ..lib import BaseParser, extract_math_nodes
 
 _SAMPLE_RE = re.compile(r"Sample (Input|Output)\s*(\d+)", re.IGNORECASE)
@@ -65,10 +65,10 @@ class AtCoderParser(BaseParser):
         if p is None:
             return None, None
         text = p.get_text()
-        return self.parse_time_limit(text), self.parse_memory_limit(text)
+        return parse_time_limit(text), parse_memory_limit(text)
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = _extract_atcoder_samples(soup)
         score_tag = soup.find("p")
         if score_tag is not None and score_tag.get_text(strip=True).lower().startswith("score"):

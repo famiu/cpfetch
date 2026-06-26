@@ -12,8 +12,15 @@ from bs4 import BeautifulSoup
 from bs4.element import NavigableString, Tag
 from markdownify import markdownify
 
-from ..cp_metadata import MathExtractor, ProblemData, SampleCase, restore_math
+from ..cp_metadata import (
+    MathSentinelRegistry,
+    ProblemData,
+    SampleCase,
+    restore_math,
+)
 from .fetch import BrowserFetch
+
+_MEDIA_TAGS = frozenset({"img", "svg", "video", "canvas"})
 
 
 def space_latex_commands(text: str) -> str:
@@ -77,13 +84,13 @@ def _extract_semantic_latex(node: Tag) -> str | None:
     return None
 
 
-def extract_math_nodes(soup: BeautifulSoup) -> MathExtractor:
+def extract_math_nodes(soup: BeautifulSoup) -> MathSentinelRegistry:
     """Scan for element-based math nodes (span.math, var) and replace them with sentinel keys.
 
     This is the default math extraction path used by CSES, AtCoder, and CodeChef.
     Codeforces uses a separate dollar-scan path (see codeforces.py) instead.
     """
-    extractor = MathExtractor()
+    extractor = MathSentinelRegistry()
 
     for node in soup.select("span.math, var"):
         if node.parent is None:
@@ -117,40 +124,6 @@ class BaseParser:
     def __init__(self, fetcher: BrowserFetch | None = None) -> None:
         self._fetcher = fetcher
 
-    _TIME_MS_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(ms|milliseconds?)\b", re.IGNORECASE)
-    _TIME_S_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(seconds?|secs|sec|s)\b", re.IGNORECASE)
-    _MEM_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(gigabytes?|GiB|GB|megabytes?|MiB|MB)\b", re.IGNORECASE)
-
-    @staticmethod
-    def parse_time_limit(text: str) -> float | None:
-        """Extract time limit from a text string and return it in milliseconds.
-
-        Handles values like "2 seconds", "500 ms", "1.5 sec". Returns None
-        if no time limit is found.
-        """
-        m = BaseParser._TIME_MS_RE.search(text)
-        if m:
-            return float(m.group(1))
-        m = BaseParser._TIME_S_RE.search(text)
-        if m:
-            return float(m.group(1)) * 1000
-        return None
-
-    @staticmethod
-    def parse_memory_limit(text: str) -> int | None:
-        """Extract memory limit from a text string and return it in megabytes.
-
-        Handles values like "256 MB", "1 GB", "512 MiB". Returns None if
-        no memory limit is found. Gigabyte values are multiplied by 1024.
-        """
-        m = BaseParser._MEM_RE.search(text)
-        if not m:
-            return None
-        value = float(m.group(1))
-        if m.group(2).lower().startswith("g"):
-            value *= 1024
-        return round(value)
-
     @staticmethod
     def _strip_trailing_separators(soup: BeautifulSoup) -> None:
         """Remove trailing <hr> and empty containers, stopping at media elements.
@@ -161,7 +134,6 @@ class BaseParser:
         in reverse order, stopping at the first meaningful element or a media tag
         (img, svg, video, canvas).
         """
-        _media_tags = frozenset({"img", "svg", "video", "canvas"})
         target: Tag = soup
         while len(target.contents) == 1 and isinstance(target.contents[0], Tag):
             target = target.contents[0]
@@ -172,7 +144,7 @@ class BaseParser:
             elif isinstance(last, NavigableString) and not str(last).strip():
                 _ = last.extract()
             elif isinstance(last, Tag) and not last.get_text(strip=True):
-                if last.name in _media_tags:
+                if last.name in _MEDIA_TAGS:
                     break
                 last.decompose()
             else:
@@ -196,11 +168,11 @@ class BaseParser:
         """Extract time and memory limits from the full-page soup. Subclasses override."""
         return None, None
 
-    def extract_math(self, soup: BeautifulSoup) -> MathExtractor:
+    def extract_math(self, soup: BeautifulSoup) -> MathSentinelRegistry:
         """Find math nodes in *soup* and replace them with sentinel keys."""
         return extract_math_nodes(soup)
 
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         """Clean up *soup* and return its math extractor and sample cases. Subclasses override."""
         return self.extract_math(soup), []
 

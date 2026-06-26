@@ -7,6 +7,7 @@ import json
 import re
 import unicodedata
 import urllib.parse
+import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -19,20 +20,21 @@ class SampleCase:
     output: str
 
 
-class MathExtractor:
-    """Generates unique sentinel keys for math expressions during DOM walking.
+class MathSentinelRegistry:
+    """Mints unique sentinel keys for math expressions during DOM walking.
 
     After extraction, only .mapping (a plain dict) is stored on ProblemData.
-    The extractor instance itself is discarded.
+    The registry instance itself is discarded.
     """
 
     def __init__(self) -> None:
         self.mapping: dict[str, str] = {}
         self._counter: int = 0
+        self._token: str = uuid.uuid4().hex[:8]
 
     def add(self, latex: str) -> str:
         """Register a LaTeX expression and return its sentinel key."""
-        key = f"XX-MATH-{self._counter}-XX"
+        key = f"XX-MATH-{self._counter}-{self._token}-XX"
         self.mapping[key] = latex
         self._counter += 1
         return key
@@ -85,6 +87,41 @@ def restore_math(text: str, math_map: dict[str, str]) -> str:
         return text
     pattern = re.compile("|".join(re.escape(k) for k in sorted(math_map, key=len, reverse=True)))
     return pattern.sub(lambda m: math_map[m.group(0)], text)
+
+
+_TIME_MS_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(ms|milliseconds?)\b", re.IGNORECASE)
+_TIME_S_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(seconds?|secs|sec|s)\b", re.IGNORECASE)
+_MEM_RE: re.Pattern[str] = re.compile(r"([\d.]+)\s*(gigabytes?|GiB|GB|megabytes?|MiB|MB)\b", re.IGNORECASE)
+
+
+def parse_time_limit(text: str) -> float | None:
+    """Extract time limit from a text string and return it in milliseconds.
+
+    Handles values like "2 seconds", "500 ms", "1.5 sec". Returns None
+    if no time limit is found.
+    """
+    m = _TIME_MS_RE.search(text)
+    if m:
+        return float(m.group(1))
+    m = _TIME_S_RE.search(text)
+    if m:
+        return float(m.group(1)) * 1000
+    return None
+
+
+def parse_memory_limit(text: str) -> int | None:
+    """Extract memory limit from a text string and return it in megabytes.
+
+    Handles values like "256 MB", "1 GB", "512 MiB". Returns None if
+    no memory limit is found. Gigabyte values are multiplied by 1024.
+    """
+    m = _MEM_RE.search(text)
+    if not m:
+        return None
+    value = float(m.group(1))
+    if m.group(2).lower().startswith("g"):
+        value *= 1024
+    return round(value)
 
 
 _META_FILE = "meta.json"

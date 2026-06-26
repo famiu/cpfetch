@@ -17,7 +17,7 @@ from typing import override
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-from ...cp_metadata import MathExtractor, SampleCase
+from ...cp_metadata import MathSentinelRegistry, SampleCase, parse_memory_limit, parse_time_limit
 from ..lib import BaseParser, extract_math_nodes
 
 
@@ -102,13 +102,13 @@ class SpojParser(BaseParser):
             label = cells[0].get_text(strip=True).lower().rstrip(":")
             value = cells[1].get_text(strip=True)
             if label == "time limit":
-                time_limit = self.parse_time_limit(value)
+                time_limit = parse_time_limit(value)
             elif label == "memory limit":
-                memory_limit = self.parse_memory_limit(value)
+                memory_limit = parse_memory_limit(value)
         return time_limit, memory_limit
 
     @override
-    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathExtractor, list[SampleCase]]:
+    def normalize(self, soup: BeautifulSoup, name: str | None = None) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = _extract_spoj_samples(soup)
 
         for heading in list(soup.select("#problem-body h3")):
