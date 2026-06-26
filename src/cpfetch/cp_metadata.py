@@ -131,7 +131,6 @@ def save_meta_json(directory: Path, data: ProblemData) -> None:
     """Write a meta.json file with problem metadata into *directory*."""
     meta_path = directory / _META_FILE
     payload = {
-        "version": 1,
         "url": data.url,
         "name": data.name,
         "site": data.site,

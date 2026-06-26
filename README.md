@@ -60,7 +60,6 @@ files), and `meta.json`.
 
 ```json
 {
-  "version": 1,
   "url": "https://codeforces.com/problemset/problem/4/A",
   "name": "Watermelon",
   "site": "codeforces",

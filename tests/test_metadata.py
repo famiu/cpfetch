@@ -125,7 +125,7 @@ class TestSaveLoadMetaUrl:
         save_meta_json(tmp_path, data)
         assert load_meta_url(tmp_path) == "https://example.com/problem/1"
         raw = json.loads((tmp_path / "meta.json").read_text(encoding="utf-8"))
-        assert raw["version"] == 1
+        assert "version" not in raw
         assert raw["name"] == "Watermelon"
         assert raw["site"] == "codeforces"
         assert raw["platform"] == "Codeforces"
