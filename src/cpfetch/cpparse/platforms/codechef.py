@@ -52,20 +52,22 @@ def _fetch_codechef_api_samples(problem_code: str) -> list[SampleCase] | None:
     api_url = f"https://www.codechef.com/api/contests/PRACTICE/problems/{problem_code}"
     try:
         with urllib.request.urlopen(api_url, timeout=10) as resp:
-            data: object = json.loads(resp.read())
+            data = json.loads(resp.read())
     except Exception:
         return None
-    if not isinstance(data, dict) or data.get("status") != "success":
+    if not isinstance(data, dict):
         return None
-    test_cases: object = data.get("problemComponents", {}).get("sampleTestCases")
+    if data.get("status") != "success":
+        return None
+    test_cases = data.get("problemComponents", {}).get("sampleTestCases")
     if not isinstance(test_cases, list):
         return None
     samples: list[SampleCase] = []
     for tc in test_cases:
         if not isinstance(tc, dict) or tc.get("isDeleted", False):
             continue
-        inp: object = tc.get("input")
-        out: object = tc.get("output")
+        inp = tc.get("input")
+        out = tc.get("output")
         if isinstance(inp, str) and isinstance(out, str):
             samples.append(SampleCase(input=inp, output=out))
     return samples

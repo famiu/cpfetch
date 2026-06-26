@@ -110,11 +110,11 @@ def load_meta_url(directory: Path) -> str | None:
     if not meta_path.exists():
         return None
     try:
-        raw: object = json.loads(meta_path.read_text(encoding="utf-8"))
+        raw = json.loads(meta_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return None
     if isinstance(raw, dict):
-        url: object = raw.get("url")
+        url = raw.get("url")
         if isinstance(url, str):
             return url
     return None

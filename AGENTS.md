@@ -35,5 +35,6 @@ To add a platform: subclass `BaseParser` in `cpparse/platforms/`, register it in
 
 - When features or CLI usage change, update README.md accordingly.
 - When fixing a bug, always add a test that checks for regression.
+- Avoid generic types (e.g. `Any`, `object`) in type annotations. Prefer precise types unless the generic is truly necessary and avoiding it would overcomplicate the code.
 - Keep AGENTS.md in sync with the repo: update it when the software layout, core paradigms, or documented commands change.
   Do not log every minor change or implementation detail here. This is a high-level map, not a changelog.

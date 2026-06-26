@@ -459,7 +459,9 @@ class TestExtractCsesSamples:
         _ = _extract_cses_samples(soup)
         constraints = soup.find("h1", id="constraints")
         assert constraints is not None
-        assert "n" in constraints.find_next("ul").get_text()
+        ul = constraints.find_next("ul")
+        assert ul is not None
+        assert "n" in ul.get_text()
 
 
 class TestFetchCodechefApiSamples:
