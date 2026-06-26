@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from cpfetch.cpparse import get_parser
@@ -39,6 +41,19 @@ SITES = [
         1536,
         1,
         id="codechef",
+    ),
+    pytest.param(
+        "spoj",
+        "https://www.spoj.com/problems/FCTRL/",
+        "FCTRL - Factorial",
+        6000.0,
+        1536,
+        1,
+        id="spoj",
+        marks=pytest.mark.skipif(
+            not os.environ.get("DISPLAY"),
+            reason="SPOJ requires a headed browser (Cloudflare Turnstile); set DISPLAY or use xvfb-run",
+        ),
     ),
 ]
 

@@ -21,7 +21,7 @@ classifiers = [
 dependencies = [
     "beautifulsoup4",
     "markdownify",
-    "playwright",
+    "patchright",
 ]
 
 [project.urls]

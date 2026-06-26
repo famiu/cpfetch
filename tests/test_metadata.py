@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from bs4 import BeautifulSoup
 
@@ -13,6 +13,7 @@ from cpfetch.cp_metadata import (
     site_from_url,
     slugify,
 )
+from cpfetch.cpparse.fetch import BrowserFetch
 from cpfetch.cpparse.lib import (
     BaseParser,
     as_code_block,
@@ -28,6 +29,7 @@ from cpfetch.cpparse.platforms.codechef import (
 )
 from cpfetch.cpparse.platforms.codeforces import CodeforcesParser
 from cpfetch.cpparse.platforms.cses import _extract_cses_samples
+from cpfetch.cpparse.platforms.spoj import SpojParser, _extract_spoj_samples
 
 
 class TestSiteFromUrl:
@@ -45,6 +47,9 @@ class TestSiteFromUrl:
 
     def test_codechef(self):
         assert site_from_url("https://www.codechef.com/problems/FLOW006") == "codechef"
+
+    def test_spoj(self):
+        assert site_from_url("https://www.spoj.com/problems/TEST/") == "spoj"
 
     def test_unknown(self):
         assert site_from_url("https://example.com/problem/1") == "unknown"
@@ -464,6 +469,112 @@ class TestExtractCsesSamples:
         assert "n" in ul.get_text()
 
 
+_SPOJ_WRAPPER = '<div id="problem-body">{}</div>'
+
+
+def _spoj_soup(body: str) -> BeautifulSoup:
+    return BeautifulSoup(_SPOJ_WRAPPER.format(body), "html.parser")
+
+
+class TestExtractSpojSamples:
+    def test_strong_labels(self) -> None:
+        soup = _spoj_soup(
+            "<h3>Example</h3>"
+            "<pre><strong>Input:</strong>\n1\n2\n88\n42\n99\n\n<strong>Output:</strong>\n1\n2\n88\n</pre>"
+        )
+        samples = _extract_spoj_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "1\n2\n88\n42\n99"
+        assert samples[0].output == "1\n2\n88"
+
+    def test_b_labels(self) -> None:
+        soup = _spoj_soup(
+            "<h3>Example</h3><pre><b>Input:</b>\n2\n1 10\n3 5\n\n<b>Output:</b>\n2\n3\n5\n7\n\n3\n5\n</pre>"
+        )
+        samples = _extract_spoj_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "2\n1 10\n3 5"
+        assert samples[0].output == "2\n3\n5\n7\n\n3\n5"
+
+    def test_no_example_heading(self) -> None:
+        soup = _spoj_soup("<p>No examples here.</p>")
+        assert _extract_spoj_samples(soup) == []
+
+    def test_example_without_pre(self) -> None:
+        soup = _spoj_soup("<h3>Example</h3><p>Just text.</p>")
+        assert _extract_spoj_samples(soup) == []
+
+    def test_example_without_labels(self) -> None:
+        soup = _spoj_soup("<h3>Example</h3><pre>just data</pre>")
+        assert _extract_spoj_samples(soup) == []
+
+    def test_non_example_h3_skipped(self) -> None:
+        soup = _spoj_soup("<h3>Input</h3><pre>data</pre>")
+        assert _extract_spoj_samples(soup) == []
+
+    def test_wrapped_pre_is_decomposed(self) -> None:
+        """Regression: a <pre> wrapped in a <div> is harvested and removed from body_html."""
+        soup = _spoj_soup(
+            "<h3>Example</h3><div><pre><b>Input:</b>\n1\n\n<b>Output:</b>\n2\n</pre></div>"
+            "<h3>Information</h3><p>keep</p>"
+        )
+        samples = _extract_spoj_samples(soup)
+        assert len(samples) == 1
+        assert samples[0].input == "1"
+        assert samples[0].output == "2"
+        assert soup.find("pre") is None
+        assert soup.find("h3", string="Example") is None
+
+
+_SPOJ_FULL_WRAPPER = (
+    '<div id="content" class="container">'
+    '<div class="row first-row">'
+    '<div class="col-lg-8 col-md-8"><div class="prob">{name}</div></div>'
+    '<div class="col-lg-4 col-md-4">{meta}</div>'
+    "</div>"
+    "{body}"
+    "</div>"
+)
+
+
+class TestSpojLimits:
+    def _make_soup(self, name_html: str, meta_html: str) -> BeautifulSoup:
+        html = _SPOJ_FULL_WRAPPER.format(name=name_html, meta=meta_html, body="")
+        return BeautifulSoup(html, "html.parser")
+
+    def test_extracts_time_and_memory(self) -> None:
+        soup = self._make_soup(
+            '<h2 id="problem-name">TEST - Life</h2>',
+            '<table id="problem-meta" class="probleminfo">'
+            "<tr><td>Added by:</td><td>mima</td></tr>"
+            "<tr><td>Time limit:</td><td>1s</td></tr>"
+            "<tr><td>Memory limit:</td><td>1536MB</td></tr>"
+            "</table>",
+        )
+        parser = SpojParser()
+        time_limit, memory_limit = parser.extract_limits(soup)
+        assert time_limit == 1000.0
+        assert memory_limit == 1536
+
+    def test_extracts_name(self) -> None:
+        soup = self._make_soup('<h2 id="problem-name">FCTRL - Factorial</h2>', "")
+        parser = SpojParser()
+        assert parser.extract_name(soup) == "FCTRL - Factorial"
+
+    def test_no_meta_table(self) -> None:
+        soup = self._make_soup('<h2 id="problem-name">Test</h2>', "")
+        parser = SpojParser()
+        assert parser.extract_limits(soup) == (None, None)
+
+    def test_missing_limits(self) -> None:
+        soup = self._make_soup(
+            '<h2 id="problem-name">Test</h2>',
+            '<table id="problem-meta"><tr><td>Added by:</td><td>mima</td></tr></table>',
+        )
+        parser = SpojParser()
+        assert parser.extract_limits(soup) == (None, None)
+
+
 class TestFetchCodechefApiSamples:
     def _make_response(self, data: dict) -> bytes:
         return json.dumps(data).encode()
@@ -612,3 +723,104 @@ class TestCodeChefParserParse:
             data = parser.parse("https://www.codechef.com/START37/problems/TEST")
         assert data is not None
         assert data.samples[0].input == "scraped"
+
+
+class TestBrowserFetchDispatch:
+    """Verify that fetch() correctly dispatches headed vs headless paths,
+    and that cf_clearance cookie reuse prevents redundant headed launches."""
+
+    def test_headed_no_clearance_triggers_temporary_browser(self) -> None:
+        fetcher = BrowserFetch()
+        ctx = MagicMock()
+        with (
+            patch.object(fetcher, "_ensure_headless", return_value=(MagicMock(), ctx)),
+            patch.object(fetcher, "_has_cf_clearance", return_value=False),
+            patch.object(fetcher, "_fetch_headed_and_seed", return_value="<html>headed</html>") as mock_headed,
+        ):
+            result = fetcher.fetch("https://spoj.com/test", "#content", headless=False)
+        assert result == "<html>headed</html>"
+        mock_headed.assert_called_once()
+
+    def test_headed_with_clearance_skips_temporary_browser(self) -> None:
+        fetcher = BrowserFetch()
+        ctx = MagicMock()
+        page = MagicMock()
+        page.content.return_value = "<html>headless</html>"
+        ctx.new_page.return_value = page
+        with (
+            patch.object(fetcher, "_ensure_headless", return_value=(MagicMock(), ctx)),
+            patch.object(fetcher, "_has_cf_clearance", return_value=True),
+            patch.object(fetcher, "_fetch_headed_and_seed") as mock_headed,
+        ):
+            result = fetcher.fetch("https://spoj.com/test", "#content", headless=False)
+        assert result == "<html>headless</html>"
+        mock_headed.assert_not_called()
+
+    def test_headless_never_checks_clearance(self) -> None:
+        fetcher = BrowserFetch()
+        ctx = MagicMock()
+        page = MagicMock()
+        page.content.return_value = "<html>headless</html>"
+        ctx.new_page.return_value = page
+        with (
+            patch.object(fetcher, "_ensure_headless", return_value=(MagicMock(), ctx)),
+            patch.object(fetcher, "_has_cf_clearance") as mock_has,
+            patch.object(fetcher, "_fetch_headed_and_seed") as mock_headed,
+        ):
+            result = fetcher.fetch("https://codeforces.com/test", "#content", headless=True)
+        assert result == "<html>headless</html>"
+        mock_has.assert_not_called()
+        mock_headed.assert_not_called()
+
+    def test_fetch_headed_and_seed_copies_only_cloudflare_cookies(self) -> None:
+        fetcher = BrowserFetch()
+        headless_ctx = MagicMock()
+        pw = MagicMock()
+        mock_browser = MagicMock()
+        pw.chromium.launch.return_value = mock_browser
+        temp_ctx = MagicMock()
+        mock_browser.new_context.return_value = temp_ctx
+        page = MagicMock()
+        page.content.return_value = "<html>test</html>"
+        temp_ctx.new_page.return_value = page
+        temp_ctx.storage_state.return_value = {
+            "cookies": [
+                {
+                    "name": "cf_clearance",
+                    "value": "abc",
+                    "domain": ".spoj.com",
+                    "path": "/",
+                    "expires": 9999999999.0,
+                    "httpOnly": True,
+                    "secure": True,
+                    "sameSite": "None",
+                },
+                {
+                    "name": "__cf_bm",
+                    "value": "def",
+                    "domain": ".spoj.com",
+                    "path": "/",
+                    "expires": 9999999999.0,
+                    "httpOnly": True,
+                    "secure": True,
+                    "sameSite": "None",
+                },
+                {
+                    "name": "session_id",
+                    "value": "xyz",
+                    "domain": ".spoj.com",
+                    "path": "/",
+                    "expires": -1.0,
+                    "httpOnly": False,
+                    "secure": False,
+                    "sameSite": "Lax",
+                },
+            ]
+        }
+
+        result = fetcher._fetch_headed_and_seed(pw, headless_ctx, "https://spoj.com/test", "#content")
+
+        assert result == "<html>test</html>"
+        headless_ctx.add_cookies.assert_called_once()
+        cookie_names = {c["name"] for c in headless_ctx.add_cookies.call_args[0][0]}
+        assert cookie_names == {"cf_clearance", "__cf_bm"}

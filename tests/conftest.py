@@ -31,14 +31,14 @@ def _scrub_html(html: str) -> str:
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup.find_all(_SCRUB_TAGS):
         tag.decompose()
-    for tag in soup.select("input[type=hidden], span.csrf-token"):
+    for tag in soup.select("input[type=hidden], span.csrf-token, #comments_table"):
         tag.decompose()
     return soup.prettify()
 
 
 def _regenerate_fixtures(filter_key: str, mode: str) -> None:
     from cpfetch.cpparse import get_parser
-    from cpfetch.cpparse.fetch import playwright_fetch
+    from cpfetch.cpparse.fetch import browser_fetch
 
     entries = _resolve_entries(filter_key)
 
@@ -47,7 +47,7 @@ def _regenerate_fixtures(filter_key: str, mode: str) -> None:
         assert parser is not None
 
         if mode in ("all", "html"):
-            html = playwright_fetch.fetch(url, parser.selector)
+            html = browser_fetch.fetch(url, parser.selector, headless=parser.headless)
             if html is None:
                 pytest.exit(f"Failed to fetch {url}", returncode=1)
             html = _scrub_html(html)

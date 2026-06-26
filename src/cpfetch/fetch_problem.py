@@ -73,13 +73,13 @@ def process_url(url: str, out_dir: Path, nest: bool) -> str | None:
 
 
 def setup() -> None:
-    """Install Playwright Chromium browser."""
+    """Install Patchright Chromium browser."""
     try:
         subprocess.check_call(
-            [sys.executable, "-m", "playwright", "install", "--with-deps", "chromium"],
+            [sys.executable, "-m", "patchright", "install", "--with-deps", "chromium"],
         )
     except subprocess.CalledProcessError as exc:
-        print(f"error: playwright install failed: {exc}", file=sys.stderr)
+        print(f"error: patchright install failed: {exc}", file=sys.stderr)
         sys.exit(1)
 
 
@@ -87,7 +87,7 @@ def main() -> None:
     """Entry point: parse CLI arguments and dispatch to the appropriate action."""
     parser = argparse.ArgumentParser(description="Fetch problem data and render problem.md")
     subparsers = parser.add_subparsers(dest="command")
-    _ = subparsers.add_parser("setup", help="install Playwright Chromium browser")
+    _ = subparsers.add_parser("setup", help="install Patchright Chromium browser")
 
     _ = parser.add_argument(
         "--url",

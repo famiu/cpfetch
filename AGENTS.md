@@ -1,6 +1,6 @@
 # cpfetch
 
-Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, and CSES.
+Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, CSES, and SPOJ.
 
 ## Layout
 
@@ -10,13 +10,13 @@ Fetch competitive programming problem statements, samples, and metadata from Cod
   - `cpparse/` — per-judge parsers
     - `__init__.py` — `get_parser()` URL-dispatch factory
     - `lib.py` — `BaseParser`, `render_markdown()`, helpers
-    - `fetch.py` — `PlaywrightFetch` context manager
-    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`
+    - `fetch.py` — `BrowserFetch` (single headless browser with headed bootstrap for Cloudflare clearance)
+    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`, `spoj.py`
 - `tests/` — pytest suite
   - `test_metadata.py` — unit tests (helpers + parser internals)
   - `test_workflow.py` — workflow tests (file I/O + markdown render)
   - `test_fixtures.py` — offline parser tests using pre-fetched HTML fixtures
-  - `test_live.py` — parametrized over 4 sites (gated: `pytest -m integration`)
+  - `test_live.py` — parametrized over supported sites (gated: `pytest -m integration`; SPOJ requires `DISPLAY`)
 
 ## Pipeline
 

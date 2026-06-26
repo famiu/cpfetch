@@ -6,4 +6,5 @@ FIXTURE_ENTRIES = [
     ("atcoder", "https://atcoder.jp/contests/abc233/tasks/abc233_a", "abc233_a"),
     ("codeforces", "https://codeforces.com/problemset/problem/1/A", "1a"),
     ("codechef", "https://www.codechef.com/problems/FLOW006", "flow006"),
+    ("spoj", "https://www.spoj.com/problems/FCTRL/", "fctrl"),
 ]
