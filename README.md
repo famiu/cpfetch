@@ -44,7 +44,7 @@ uv run cpfetch refetch --problems-dir problems
 ```
 
 > [!NOTE]
-> SPOJ is behind Cloudflare Turnstile. The first SPOJ fetch in a session opens a headed browser window to obtain a clearance cookie; subsequent fetches reuse it without a visible window.
+> Some sites may be behind Cloudflare Turnstile. For these sites, the first fetch in a session opens a headed browser window to obtain a clearance cookie; subsequent fetches reuse it without a visible window.
 > On a headless server, wrap with `xvfb-run`:
 >
 > ```sh
@@ -53,8 +53,7 @@ uv run cpfetch refetch --problems-dir problems
 
 ## Output
 
-Each problem directory contains `problem.md`, `tests/` (numbered `.in`/`.out`
-files), and `meta.json`.
+Each problem directory contains `problem.md`, `tests/` (numbered `.in`/`.out` files), and `meta.json`.
 
 `meta.json` stores structured problem metadata:
 
