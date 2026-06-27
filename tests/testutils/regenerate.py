@@ -56,7 +56,8 @@ def regenerate_fixtures(filter_key: str, mode: str) -> None:
     with BrowserFetch() as fetcher:
         for site, url, slug in entries:
             parser = get_parser(url, fetcher)
-            assert parser is not None
+            if parser is None:
+                pytest.exit(f"No parser found for {url}", returncode=1)
 
             if mode in ("all", "html"):
                 html = fetcher.fetch(url, parser.selector, headless=parser.headless)
@@ -71,7 +72,8 @@ def regenerate_fixtures(filter_key: str, mode: str) -> None:
 
             if mode in ("all", "json"):
                 data = parser.extract_data(html, url)
-                assert data is not None
+                if data is None:
+                    pytest.exit(f"Failed to parse {url}", returncode=1)
                 snapshot = {
                     "name": data.name,
                     "site": data.site,

@@ -40,7 +40,7 @@ def test_fixture_parse(site: str, url: str, slug: str) -> None:
     assert data.url == expected["url"]
     assert data.time_limit == expected["time_limit"]
     assert data.memory_limit == expected["memory_limit"]
-    assert normalize_sentinels(data.body_html) == normalize_sentinels(expected["body_html"])
+    assert normalize_sentinels(data.body_html) == expected["body_html"]
 
     assert len(data.samples) == len(expected["samples"])
     for i, (a, e) in enumerate(zip(data.samples, expected["samples"], strict=True)):

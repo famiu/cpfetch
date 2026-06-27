@@ -186,7 +186,9 @@ class BaseParser:
 
     def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         """Clean up *soup* and return its math extractor and sample cases. Subclasses override."""
-        return self.extract_math(soup), self.extract_samples(soup)
+        samples = self.extract_samples(soup)
+        extractor = self.extract_math(soup)
+        return extractor, samples
 
     def post_normalize(self, soup: BeautifulSoup, name: str) -> None:
         """Final cleanup pass after heading normalization and trailing-separator strip.
