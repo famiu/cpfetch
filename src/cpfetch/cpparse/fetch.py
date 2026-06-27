@@ -19,6 +19,8 @@ from patchright.sync_api import Browser, BrowserContext
 from patchright.sync_api import Playwright as Driver
 from patchright.sync_api import sync_playwright as sync_driver
 
+type JSONValue = dict[str, JSONValue] | list[JSONValue] | str | int | float | bool | None
+
 _log = logging.getLogger(__name__)
 
 _INIT_SCRIPT = 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
@@ -203,7 +205,7 @@ class BrowserFetch:
             _log.error("fetch failed for %s: %s", url, exc)
             return None
 
-    def request_get(self, url: str) -> object | None:
+    def request_get(self, url: str) -> JSONValue | None:
         """Fetch JSON from *url* via the browser context's request API.
 
         Returns the parsed JSON value, or None if the request fails or the
