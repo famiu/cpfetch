@@ -33,7 +33,11 @@ def write_samples(tests_dir: Path, samples: list[SampleCase]) -> None:
 
     for p in tests_dir.iterdir():
         if p.suffix in (".in", ".out") and p.stem.isdigit():
-            p.unlink()
+            # Ensure that there are no directories or symlinks named like the sample files.
+            if p.is_dir() and not p.is_symlink():
+                shutil.rmtree(p)
+            else:
+                p.unlink()
 
     for i, sample in enumerate(samples, 1):
         _ = (tests_dir / f"{i:02d}.in").write_text(sample.input, encoding="utf-8")
@@ -50,9 +54,9 @@ def process_url(
 ) -> str | None:
     """Fetch problem, render markdown, write artifacts. Returns output dir path or None.
 
-    When *atomic* is True, artifacts are written to a temporary staging directory
-    and the target directory is replaced only after all writes succeed. This
-    prevents partial updates to an existing problem directory on failure.
+    When *atomic* is True, artifacts are written to a temporary staging directory and files in the
+    target directory are replaced only after all writes succeed. This prevents partial updates to
+    an existing problem directory on failure.
     """
     parser = get_parser(url, fetcher)
     if parser is None:
@@ -93,33 +97,60 @@ def process_url(
     return str(output_dir)
 
 
-def _write_atomic(output_dir: Path, data: ProblemData, md_content: str) -> str | None:
-    """Write artifacts to a staging dir, then atomically replace *output_dir*."""
+def _write_atomic(output_dir: Path, data: ProblemData, md_content: str) -> str:
+    """Write artifacts to a staging dir, then atomically replace paths in *output_dir*."""
     output_dir.parent.mkdir(parents=True, exist_ok=True)
 
-    # Restore leftover backup from a previous interrupted run
     backup_dir = output_dir.with_name(f".{output_dir.name}.old")
     if backup_dir.exists() and not output_dir.exists():
-        backup_dir.rename(output_dir)
+        _log.warning("recovering from incomplete previous write; restoring %s", backup_dir)
+        _ = backup_dir.rename(output_dir)
 
     staging_dir = Path(tempfile.mkdtemp(dir=output_dir.parent, prefix=f".{output_dir.name}."))
     try:
-        write_samples(staging_dir / "tests", data.samples)
-        _ = (staging_dir / "problem.md").write_text(md_content, encoding="utf-8")
+        # Seed staging with everything that already exists, then overwrite managed files
+        if output_dir.exists():
+            _ = shutil.copytree(output_dir, staging_dir, dirs_exist_ok=True, symlinks=True)
+
+        tests_dir = staging_dir / "tests"
+        problem_md = staging_dir / "problem.md"
+        meta_json = staging_dir / "meta.json"
+
+        # Look for any symlinks copied over by shutil.copytree() to any of the managed paths.
+        # If found, unlink in order to avoid overriding it.
+        for managed_path in [tests_dir, problem_md, meta_json]:
+            if managed_path.is_symlink():
+                managed_path.unlink()
+
+        # If the path type of any of the managed paths is wrong, remove it so that we can write the correct type.
+        if tests_dir.is_file():
+            tests_dir.unlink()
+        if problem_md.is_dir():
+            shutil.rmtree(problem_md, ignore_errors=True)
+        if meta_json.is_dir():
+            shutil.rmtree(meta_json, ignore_errors=True)
+
+        write_samples(tests_dir, data.samples)
+        _ = problem_md.write_text(md_content, encoding="utf-8")
         save_meta_json(staging_dir, data)
 
         if output_dir.exists():
             if backup_dir.exists():
                 shutil.rmtree(backup_dir)
-            output_dir.rename(backup_dir)
+            _ = output_dir.rename(backup_dir)
+
             try:
-                staging_dir.rename(output_dir)
+                _ = staging_dir.rename(output_dir)
             except OSError:
-                backup_dir.rename(output_dir)
+                try:
+                    _ = backup_dir.rename(output_dir)
+                except OSError:
+                    _log.exception("failed to restore backup; data may be in %s", backup_dir)
                 raise
+
             shutil.rmtree(backup_dir, ignore_errors=True)
         else:
-            staging_dir.rename(output_dir)
+            _ = staging_dir.rename(output_dir)
 
         _log.info("saved: %s", output_dir)
         return str(output_dir)
