@@ -68,7 +68,10 @@ def regenerate_fixtures(filter_key: str, mode: str) -> None:
                 html_path.write_text(html, encoding="utf-8")
                 print(f"Regenerated {html_path}")
             else:
-                html = (FIXTURES_DIR / site / f"{slug}.html").read_text(encoding="utf-8")
+                html_path = FIXTURES_DIR / site / f"{slug}.html"
+                if not html_path.exists():
+                    pytest.exit(f"No HTML fixture for {site}/{slug}; run with HTML regeneration first", returncode=1)
+                html = html_path.read_text(encoding="utf-8")
 
             if mode in ("all", "json"):
                 data = parser.extract_data(html, url)
