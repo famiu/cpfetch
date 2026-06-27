@@ -71,3 +71,6 @@ Each problem directory contains `problem.md`, `tests/` (numbered `.in`/`.out` fi
 ## License
 
 [AGPLv3 or later](LICENSE).
+
+> [!NOTE]
+> Much of this project is written using AI coding tools (e.g. OpenCode) as I cannot afford to spend much time on a utility project. While I supervise the overall structure of the project, I don't care to control the minute details. As a result, the code may contain vulnerabilities or bugs. Use at your own risk, and please report any issues you find.
