@@ -5,7 +5,6 @@ To work around this, math nodes are replaced with sentinel keys before markdowni
 then the sentinels are restored as raw $...$ expressions afterward.
 """
 
-import re
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
@@ -21,11 +20,6 @@ from ..cp_metadata import (
 from .fetch import BrowserFetch
 
 _MEDIA_TAGS = frozenset({"img", "svg", "video", "canvas"})
-
-
-def space_latex_commands(text: str) -> str:
-    """Append {} after each LaTeX command followed by whitespace to prevent gobbling."""
-    return re.sub(r"\\(\w+)(?=\s)", r"\\\1{}", text)
 
 
 def is_section_heading(text: str) -> bool:
@@ -67,19 +61,19 @@ def _extract_semantic_latex(node: Tag) -> str | None:
 
     annotation = node.select_one("annotation[encoding='application/x-tex']")
     if annotation is not None:
-        latex = space_latex_commands(annotation.get_text().strip())
+        latex = annotation.get_text().strip()
         is_display = "math-display" in classes or "katex-display" in classes
         return f"$${latex}$$" if is_display else f"${latex}$"
 
     if node.name == "span" and "math" in classes:
         for hidden in list(node.select('[aria-hidden="true"]')):
             hidden.decompose()
-        raw = space_latex_commands(node.get_text().strip())
+        raw = node.get_text().strip()
         is_display = "math-display" in classes
         return f"$${raw}$$" if is_display else f"${raw}$"
 
     if node.name == "var":
-        return f"${space_latex_commands(node.get_text().strip())}$"
+        return f"${node.get_text().strip()}$"
 
     return None
 

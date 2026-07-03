@@ -13,7 +13,7 @@
     }
   ],
   "math": {
-    "XX-MATH-0-XX": "$1 \\leq{} T \\leq{} 1000$",
-    "XX-MATH-1-XX": "$1 \\leq{} N \\leq{} 1000000$"
+    "XX-MATH-0-XX": "$1 \\leq T \\leq 1000$",
+    "XX-MATH-1-XX": "$1 \\leq N \\leq 1000000$"
   }
 }

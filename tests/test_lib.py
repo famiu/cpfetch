@@ -11,22 +11,7 @@ from cpfetch.cpparse.lib import (
     fmt_time,
     is_section_heading,
     render_markdown,
-    space_latex_commands,
 )
-
-
-class TestSpaceLatexCommands:
-    def test_basic_command(self):
-        assert space_latex_commands(r"\le n") == r"\le{} n"
-
-    def test_no_command(self):
-        assert space_latex_commands("plain text") == "plain text"
-
-    def test_multiple_commands(self):
-        assert space_latex_commands(r"\le n \ge m") == r"\le{} n \ge{} m"
-
-    def test_command_at_end(self):
-        assert space_latex_commands(r"abc \le") == r"abc \le"
 
 
 class TestIsSectionHeading:

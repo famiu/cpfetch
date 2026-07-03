@@ -19,6 +19,6 @@
   "math": {
     "XX-MATH-0-XX": "$1,2,\\ldots,n$",
     "XX-MATH-1-XX": "$n$",
-    "XX-MATH-2-XX": "$1 \\le{} n \\le{} 10^6$"
+    "XX-MATH-2-XX": "$1 \\le n \\le 10^6$"
   }
 }

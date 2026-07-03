@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from ...cp_metadata import MathSentinelRegistry, SampleCase, parse_memory_limit, parse_time_limit
-from ..lib import BaseParser, space_latex_commands
+from ..lib import BaseParser
 
 _SKIP_ANCESTORS = {"pre", "code", "script", "style"}
 
@@ -25,7 +25,7 @@ _SKIP_ANCESTORS = {"pre", "code", "script", "style"}
 def _extract_tex_span_math(soup: BeautifulSoup, extractor: MathSentinelRegistry) -> None:
     for node in soup.select("span.tex-span"):
         text = node.get_text().strip().replace("\u2009", " ")
-        _ = node.replace_with(extractor.add(f"${space_latex_commands(text)}$"))
+        _ = node.replace_with(extractor.add(f"${text}$"))
 
 
 def _extract_mathjax_nodes(soup: BeautifulSoup, extractor: MathSentinelRegistry) -> None:
@@ -37,7 +37,7 @@ def _extract_mathjax_nodes(soup: BeautifulSoup, extractor: MathSentinelRegistry)
         noise.decompose()
     for script in scripts:
         raw = script.string or ""
-        processed = space_latex_commands(raw)
+        processed = raw
         is_display = "mode=display" in (script.get("type") or "")
         delim = "$$" if is_display else "$"
         _ = script.replace_with(extractor.add(f"{delim}{processed}{delim}"))
@@ -77,7 +77,7 @@ def _extract_raw_dollar_math(soup: BeautifulSoup, extractor: MathSentinelRegistr
                 break
 
             raw = s[j:end]
-            processed = space_latex_commands(raw)
+            processed = raw
             parts.append(extractor.add(f"{delim}{processed}{delim}"))
             i = end + len(delim)
 
