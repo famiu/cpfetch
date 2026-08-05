@@ -2,9 +2,9 @@
 
 Easily fetch competitive programming problem statements and sample tests, right from your terminal.
 
-For each problem, cpfetch saves a formatted `problem.md`, a `tests/` directory with numbered `.in`/`.out` sample files, and a `meta.json` for re-fetching. No browser extension required, everything runs from the command line.
+For each problem, cpfetch fetches the problem statement, a metadata file for programmatic parsing, and even the test cases (for supported sites). No browser extension required, everything runs from the command line.
 
-- **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES, SPOJ
+- **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES, SPOJ, LeetCode
 - **Problem body + samples**: the full problem statement alongside ready-to-use test files
 - **Math rendering**: correctly renders inline math / math blocks from all of the supported platforms
 
@@ -53,7 +53,7 @@ uv run cpfetch refetch --problems-dir problems
 
 ## Output
 
-Each problem directory contains `problem.md`, `tests/` (numbered `.in`/`.out` files), and `meta.json`.
+Each problem directory contains `problem.md` and `meta.json`. Standard input/output problems also include `tests/` with numbered `.in`/`.out` files.
 
 `meta.json` stores structured problem metadata:
 

@@ -176,3 +176,56 @@ class TestAtomicWrite:
         assert (output_dir / "meta.json").exists()
         # Old content is gone
         assert "old content" not in (output_dir / "problem.md").read_text()
+
+
+class TestNonStdinSamples:
+    def test_process_url_does_not_create_tests_directory(self, tmp_path) -> None:
+        from unittest.mock import MagicMock, patch
+
+        data = ProblemData(
+            name="Two Sum",
+            site="leetcode",
+            platform="LeetCode",
+            url="https://leetcode.com/problems/two-sum/description/",
+            time_limit=None,
+            memory_limit=None,
+            samples=[SampleCase(input="nums = [2,7], target = 9", output="[0,1]")],
+            body_html="<p>Find two values.</p>",
+        )
+
+        with patch("cpfetch.fetch_problem.get_parser") as mock_get_parser:
+            mock_parser = MagicMock()
+            mock_parser.parse.return_value = data
+            mock_parser.write_sample_files = False
+            mock_get_parser.return_value = mock_parser
+
+            result = process_url(data.url, tmp_path, nest=False, fetcher=MagicMock())
+
+        assert result == str(tmp_path)
+        assert not (tmp_path / "tests").exists()
+        assert "## Examples" in (tmp_path / "problem.md").read_text()
+
+    def test_atomic_process_does_not_create_tests_directory(self, tmp_path) -> None:
+        from unittest.mock import MagicMock, patch
+
+        data = ProblemData(
+            name="Two Sum",
+            site="leetcode",
+            platform="LeetCode",
+            url="https://leetcode.com/problems/two-sum/description/",
+            time_limit=None,
+            memory_limit=None,
+            samples=[SampleCase(input="nums = [2,7], target = 9", output="[0,1]")],
+            body_html="<p>Find two values.</p>",
+        )
+
+        with patch("cpfetch.fetch_problem.get_parser") as mock_get_parser:
+            mock_parser = MagicMock()
+            mock_parser.parse.return_value = data
+            mock_parser.write_sample_files = False
+            mock_get_parser.return_value = mock_parser
+            result = process_url(data.url, tmp_path, nest=True, fetcher=MagicMock(), atomic=True)
+
+        output_dir = tmp_path / "leetcode" / "two_sum"
+        assert result == str(output_dir)
+        assert not (output_dir / "tests").exists()
