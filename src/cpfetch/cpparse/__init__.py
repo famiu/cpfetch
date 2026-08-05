@@ -8,7 +8,7 @@ and normalization logic specific to one judge — Codeforces, CodeChef, CSES, or
 from ..cp_metadata import site_from_url
 from .fetch import BrowserFetch
 from .lib import BaseParser, render_markdown
-from .platforms import AtCoderParser, CodeChefParser, CodeforcesParser, CsesParser, SpojParser
+from .platforms import AtCoderParser, CodeChefParser, CodeforcesParser, CsesParser, LeetCodeParser, SpojParser
 
 __all__ = ["get_parser", "render_markdown"]
 
@@ -18,6 +18,7 @@ _PARSERS: dict[str, type[BaseParser]] = {
     "cses": CsesParser,
     "atcoder": AtCoderParser,
     "spoj": SpojParser,
+    "leetcode": LeetCodeParser,
 }
 
 

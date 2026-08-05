@@ -122,6 +122,7 @@ class BaseParser:
     selector: str = ""
     headless: bool = True
     _strip_trailing: bool = True
+    write_sample_files: bool = True
 
     def __init__(self, fetcher: BrowserFetch | None = None) -> None:
         self._fetcher = fetcher

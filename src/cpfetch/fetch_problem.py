@@ -79,14 +79,15 @@ def process_url(
 
     if atomic:
         try:
-            return _write_atomic(output_dir, data, md_content)
+            return _write_atomic(output_dir, data, md_content, write_sample_files=parser.write_sample_files)
         except OSError as exc:
             _log.error("failed to write %s: %s", output_dir, exc)
             return None
 
     try:
         output_dir.mkdir(parents=True, exist_ok=True)
-        write_samples(output_dir / "tests", data.samples)
+        if parser.write_sample_files:
+            write_samples(output_dir / "tests", data.samples)
         _ = (output_dir / "problem.md").write_text(md_content, encoding="utf-8")
         save_meta_json(output_dir, data)
     except OSError as exc:
@@ -97,7 +98,7 @@ def process_url(
     return str(output_dir)
 
 
-def _write_atomic(output_dir: Path, data: ProblemData, md_content: str) -> str:
+def _write_atomic(output_dir: Path, data: ProblemData, md_content: str, *, write_sample_files: bool) -> str:
     """Write artifacts to a staging dir, then atomically replace paths in *output_dir*."""
     output_dir.parent.mkdir(parents=True, exist_ok=True)
 
@@ -118,19 +119,23 @@ def _write_atomic(output_dir: Path, data: ProblemData, md_content: str) -> str:
 
         # Look for any symlinks copied over by shutil.copytree() to any of the managed paths.
         # If found, unlink in order to avoid overriding it.
-        for managed_path in [tests_dir, problem_md, meta_json]:
+        managed_paths = [problem_md, meta_json]
+        if write_sample_files:
+            managed_paths.append(tests_dir)
+        for managed_path in managed_paths:
             if managed_path.is_symlink():
                 managed_path.unlink()
 
         # If the path type of any of the managed paths is wrong, remove it so that we can write the correct type.
-        if tests_dir.is_file():
+        if write_sample_files and tests_dir.is_file():
             tests_dir.unlink()
         if problem_md.is_dir():
             shutil.rmtree(problem_md, ignore_errors=True)
         if meta_json.is_dir():
             shutil.rmtree(meta_json, ignore_errors=True)
 
-        write_samples(tests_dir, data.samples)
+        if write_sample_files:
+            write_samples(tests_dir, data.samples)
         _ = problem_md.write_text(md_content, encoding="utf-8")
         save_meta_json(staging_dir, data)
 

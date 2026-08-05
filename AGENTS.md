@@ -1,6 +1,6 @@
 # cpfetch
 
-Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, CSES, and SPOJ.
+Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, CSES, SPOJ, and LeetCode.
 
 ## Layout
 
@@ -11,7 +11,7 @@ Fetch competitive programming problem statements, samples, and metadata from Cod
     - `__init__.py` — `get_parser()` URL-dispatch factory
     - `lib.py` — `BaseParser`, `render_markdown()`, helpers
     - `fetch.py` — `BrowserFetch` (single headless browser with headed bootstrap for Cloudflare clearance)
-    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`, `spoj.py`
+    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`, `leetcode.py`, `spoj.py`
 - `tests/` — pytest suite
   - `test_metadata.py` — unit tests (helpers + parser internals)
   - `test_workflow.py` — workflow tests (file I/O + markdown render)
@@ -20,7 +20,7 @@ Fetch competitive programming problem statements, samples, and metadata from Cod
 
 ## Pipeline
 
-`get_parser(url)` → `parser.parse(url)` → `ProblemData` → `render_markdown(data)` → writes `problem.md`, `tests/*.in`/`*.out`, `meta.json`.
+`get_parser(url)` → `parser.parse(url)` → `ProblemData` → `render_markdown(data)` → writes `problem.md`, `meta.json`, and optionally `tests/*.in`/`*.out`.
 
 To add a platform: subclass `BaseParser` in `cpparse/platforms/`, register it in `cpparse/__init__.py` (`_PARSERS`), and add the host to `_HOST_SITES` in `cp_metadata.py`.
 
