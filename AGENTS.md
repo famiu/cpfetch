@@ -16,7 +16,7 @@ Fetch competitive programming problem statements, samples, and metadata from Cod
   - `test_metadata.py` — unit tests (helpers + parser internals)
   - `test_workflow.py` — workflow tests (file I/O + markdown render)
   - `test_fixtures.py` — offline parser tests using pre-fetched HTML fixtures
-  - `test_live.py` — parametrized over supported sites (gated: `pytest -m integration`; SPOJ requires `DISPLAY`)
+  - `test_live.py` — parametrized over supported sites (`integration`; CI subset: `ci_integration`; SPOJ requires `DISPLAY`)
 
 ## Pipeline
 
@@ -28,6 +28,7 @@ To add a platform: subclass `BaseParser` in `cpparse/platforms/`, register it in
 
 - `uv run pytest tests/` — run offline tests
 - `uv run pytest tests/ -m integration` — run integration tests
+- `uv run pytest tests/ -m ci_integration` — run the CI integration subset
 - `uv run pytest --regenerate [site/slug] [--html-only|--json-only]` — regenerate fixture snapshots
 - `uv run ruff check src/ tests/` — lint
 - `uv run ruff format --check src/ tests/` — format check

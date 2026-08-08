@@ -90,6 +90,7 @@ python-version = "3.14"
 [tool.pytest.ini_options]
 markers = [
     "integration: smoke tests that hit live websites",
+    "ci_integration: live tests included in CI",
 ]
 addopts = "-m 'not integration'"
 testpaths = ["tests"]

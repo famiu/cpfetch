@@ -8,4 +8,5 @@ FIXTURE_ENTRIES = [
     ("codechef", "https://www.codechef.com/problems/FLOW006", "flow006"),
     ("spoj", "https://www.spoj.com/problems/FCTRL/", "fctrl"),
     ("spoj", "https://www.spoj.com/problems/DIVSUM/", "divsum"),
+    ("leetcode", "https://leetcode.com/problems/two-sum/description/", "two_sum"),
 ]

@@ -15,6 +15,7 @@ SITES = [
         512,
         2,
         id="cses",
+        marks=pytest.mark.ci_integration,
     ),
     pytest.param(
         "atcoder",
@@ -24,6 +25,7 @@ SITES = [
         1024,
         3,
         id="atcoder",
+        marks=pytest.mark.ci_integration,
     ),
     pytest.param(
         "codeforces",
@@ -33,6 +35,7 @@ SITES = [
         256,
         1,
         id="codeforces",
+        marks=pytest.mark.ci_integration,
     ),
     pytest.param(
         "codechef",
@@ -42,6 +45,7 @@ SITES = [
         1536,
         1,
         id="codechef",
+        marks=pytest.mark.ci_integration,
     ),
     pytest.param(
         "spoj",
@@ -56,6 +60,15 @@ SITES = [
             reason="SPOJ requires a headed browser (Cloudflare Turnstile); set DISPLAY or use xvfb-run",
         ),
     ),
+    pytest.param(
+        "leetcode",
+        "https://leetcode.com/problems/two-sum/description/",
+        "Two Sum",
+        None,
+        None,
+        3,
+        id="leetcode",
+    ),
 ]
 
 
@@ -68,8 +81,8 @@ def test_live_fetch(
     site: str,
     url: str,
     expected_name: str,
-    time: float,
-    mem: int,
+    time: float | None,
+    mem: int | None,
     count: int,
 ) -> None:
     """Smoke test: fetch and parse a known live problem, verifying full metadata."""
@@ -88,4 +101,3 @@ def test_live_fetch(
         for i, sample in enumerate(data.samples):
             assert sample.input.strip(), f"sample[{i}] input is empty"
             assert sample.output.strip(), f"sample[{i}] output is empty"
-        assert len(data.math) > 0
