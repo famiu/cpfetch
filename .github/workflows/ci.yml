@@ -43,4 +43,4 @@ jobs:
           enable-cache: true
       - run: uv sync
       - run: uv run cpfetch setup
-      - run: uv run pytest tests/ -m integration
+      - run: uv run pytest tests/ -m ci_integration
