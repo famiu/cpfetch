@@ -1,6 +1,6 @@
 # cpfetch
 
-Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, CSES, SPOJ, and LeetCode.
+Fetch competitive programming problem statements, samples, and metadata from Codeforces, AtCoder, CodeChef, CSES, SPOJ, LeetCode, and HackerRank.
 
 ## Layout
 
@@ -11,7 +11,7 @@ Fetch competitive programming problem statements, samples, and metadata from Cod
     - `__init__.py` — `get_parser()` URL-dispatch factory
     - `lib.py` — `BaseParser`, `render_markdown()`, helpers
     - `fetch.py` — `BrowserFetch` (single headless browser with headed bootstrap for Cloudflare clearance)
-    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`, `leetcode.py`, `spoj.py`
+    - `platforms/` — `atcoder.py`, `codechef.py`, `codeforces.py`, `cses.py`, `hackerrank.py`, `leetcode.py`, `spoj.py`
 - `tests/` — pytest suite
   - `test_metadata.py` — unit tests (helpers + parser internals)
   - `test_workflow.py` — workflow tests (file I/O + markdown render)

@@ -62,6 +62,7 @@ _HOST_SITES: dict[str, str] = {
     "codechef.com": "codechef",
     "spoj.com": "spoj",
     "leetcode.com": "leetcode",
+    "hackerrank.com": "hackerrank",
 }
 
 

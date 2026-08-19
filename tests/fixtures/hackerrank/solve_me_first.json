@@ -1,0 +1,16 @@
+{
+  "name": "Solve Me First",
+  "site": "hackerrank",
+  "platform": "HackerRank",
+  "url": "https://www.hackerrank.com/challenges/solve-me-first/problem",
+  "time_limit": null,
+  "memory_limit": null,
+  "body_html": "<div class=\"challenge-body-html\"><div class=\"challenge_problem_statement\"><div class=\"msB challenge_problem_statement_body\"><div class=\"hackdown-content\"><p>Complete the function  to compute the sum of two integers.</p>\n<p><strong>Example</strong> <br/>\n <br/>\n </p>\n<p>Return .</p>\n<p><strong>Function Description</strong> </p>\n<p>Complete the  function with the following parameters:  </p>\n<ul>\n<li>: the first value</li>\n<li>: the second value</li>\n</ul>\n<p>Returns <br/>\n- : the sum of  and </p></div></div></div><div class=\"challenge_constraints\"><div class=\"msB challenge_constraints_title\"><p><strong>Constraints</strong></p></div><div class=\"msB challenge_constraints_body\"><div class=\"hackdown-content\"><p> </p></div></div></div><div class=\"challenge_explanation\"><div class=\"msB challenge_explanation_title\"><p><strong>Explanation</strong></p></div><div class=\"msB challenge_explanation_body\"><div class=\"hackdown-content\"><p>. </p></div></div></div></div>",
+  "samples": [
+    {
+      "input": "a = 2\nb = 3",
+      "output": "5"
+    }
+  ],
+  "math": {}
+}

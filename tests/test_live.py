@@ -69,6 +69,15 @@ SITES = [
         3,
         id="leetcode",
     ),
+    pytest.param(
+        "hackerrank",
+        "https://www.hackerrank.com/challenges/solve-me-first/problem",
+        "Solve Me First",
+        None,
+        None,
+        1,
+        id="hackerrank",
+    ),
 ]
 
 

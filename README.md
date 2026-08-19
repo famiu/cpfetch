@@ -4,9 +4,9 @@ Easily fetch competitive programming problem statements and sample tests, right 
 
 For each problem, cpfetch fetches the problem statement, a metadata file for programmatic parsing, and even the test cases (for supported sites). No browser extension required, everything runs from the command line.
 
-- **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES, SPOJ, LeetCode
+- **Multi-platform**: Codeforces, AtCoder, CodeChef, CSES, SPOJ, LeetCode, HackerRank
 - **Problem body + samples**: the full problem statement alongside ready-to-use test files
-- **Math rendering**: correctly renders inline math / math blocks from all of the supported platforms
+- **Math rendering**: preserves source math where the judge exposes it
 
 Requires [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) in order to bypass Cloudflare and process sites with dynamic content (e.g. CodeChef, SPOJ).
 
