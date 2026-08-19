@@ -37,6 +37,9 @@ class TestSiteFromUrl:
     def test_leetcode(self):
         assert site_from_url("https://leetcode.com/problems/two-sum/description/") == "leetcode"
 
+    def test_hackerrank(self):
+        assert site_from_url("https://www.hackerrank.com/challenges/solve-me-first/problem") == "hackerrank"
+
     def test_unknown(self):
         assert site_from_url("https://example.com/problem/1") == "unknown"
 

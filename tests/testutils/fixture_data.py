@@ -9,4 +9,5 @@ FIXTURE_ENTRIES = [
     ("spoj", "https://www.spoj.com/problems/FCTRL/", "fctrl"),
     ("spoj", "https://www.spoj.com/problems/DIVSUM/", "divsum"),
     ("leetcode", "https://leetcode.com/problems/two-sum/description/", "two_sum"),
+    ("hackerrank", "https://www.hackerrank.com/challenges/solve-me-first/problem", "solve_me_first"),
 ]

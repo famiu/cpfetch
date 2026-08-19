@@ -2,13 +2,21 @@
 
 The get_parser(url, fetcher) factory dispatches to the correct platform parser by extracting the
 site key from the URL hostname. Each subclass of BaseParser encapsulates DOM extraction
-and normalization logic specific to one judge — Codeforces, CodeChef, CSES, or AtCoder.
+and normalization logic specific to one judge.
 """
 
 from ..cp_metadata import site_from_url
 from .fetch import BrowserFetch
 from .lib import BaseParser, render_markdown
-from .platforms import AtCoderParser, CodeChefParser, CodeforcesParser, CsesParser, LeetCodeParser, SpojParser
+from .platforms import (
+    AtCoderParser,
+    CodeChefParser,
+    CodeforcesParser,
+    CsesParser,
+    HackerRankParser,
+    LeetCodeParser,
+    SpojParser,
+)
 
 __all__ = ["get_parser", "render_markdown"]
 
@@ -19,6 +27,7 @@ _PARSERS: dict[str, type[BaseParser]] = {
     "atcoder": AtCoderParser,
     "spoj": SpojParser,
     "leetcode": LeetCodeParser,
+    "hackerrank": HackerRankParser,
 }
 
 
