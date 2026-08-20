@@ -23,10 +23,11 @@ def _sample_body(section: Tag, selector: str) -> str | None:
 
 def _extract_hackerrank_samples(soup: BeautifulSoup) -> list[SampleCase]:
     """Extract and remove paired HackerRank sample input and output blocks."""
-    inputs = list(soup.select(".challenge_sample_input"))
-    outputs = list(soup.select(".challenge_sample_output"))
     samples: list[SampleCase] = []
-    for input_section, output_section in zip(inputs, outputs, strict=False):
+    for input_section in list(soup.select(".challenge_sample_input")):
+        output_section = input_section.find_next_sibling()
+        if output_section is None or "challenge_sample_output" not in output_section.get_attribute_list("class"):
+            continue
         sample_input = _sample_body(input_section, ".challenge_sample_input_body")
         sample_output = _sample_body(output_section, ".challenge_sample_output_body")
         if sample_input is None or sample_output is None:
@@ -65,6 +66,6 @@ class HackerRankParser(BaseParser):
     @override
     def normalize(self, soup: BeautifulSoup) -> tuple[MathSentinelRegistry, list[SampleCase]]:
         samples = self.extract_samples(soup)
-        for node in soup.select("style, svg, .MathJax_SVG"):
+        for node in soup.select("style, .MathJax_SVG"):
             node.decompose()
         return extract_math_nodes(soup), samples

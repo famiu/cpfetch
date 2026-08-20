@@ -16,6 +16,7 @@ def test_extracts_samples_and_removes_legacy_svg_math() -> None:
       <div class="challenge-body-html">
         <style>.MathJax_SVG { display: inline; }</style>
         <p>Complete the function <span class="MathJax_SVG"><svg><path></path></svg></span>.</p>
+        <svg id="diagram"><path></path></svg>
         <div class="challenge_sample_input">
           <div class="challenge_sample_input_body">2\n3\n</div>
         </div>
@@ -38,7 +39,7 @@ def test_extracts_samples_and_removes_legacy_svg_math() -> None:
     assert "challenge_sample_input" not in data.body_html
     assert "challenge_sample_output" not in data.body_html
     assert "MathJax_SVG" not in data.body_html
-    assert "<svg" not in data.body_html
+    assert '<svg id="diagram">' in data.body_html
     assert "2 + 3 = 5." in data.body_html
 
 
@@ -52,3 +53,17 @@ def test_preserves_unpaired_sample_blocks() -> None:
     assert data is not None
     assert data.samples == []
     assert "challenge_sample_input" in data.body_html
+
+
+def test_does_not_cross_pair_samples_after_an_unmatched_input() -> None:
+    html = """<div class="challenge-body-html">
+      <div class="challenge_sample_input"><div class="challenge_sample_input_body">orphan</div></div>
+      <div class="challenge_sample_input"><div class="challenge_sample_input_body">2</div></div>
+      <div class="challenge_sample_output"><div class="challenge_sample_output_body">5</div></div>
+    </div>"""
+
+    data = HackerRankParser().extract_data(html, "https://www.hackerrank.com/challenges/solve-me-first/problem")
+
+    assert data is not None
+    assert [(sample.input, sample.output) for sample in data.samples] == [("2", "5")]
+    assert "orphan" in data.body_html
