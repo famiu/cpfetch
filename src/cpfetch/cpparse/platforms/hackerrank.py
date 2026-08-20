@@ -32,7 +32,11 @@ def _extract_hackerrank_samples(soup: BeautifulSoup) -> list[SampleCase]:
         sample_output = _sample_body(output_section, ".challenge_sample_output_body")
         if sample_input is None or sample_output is None:
             continue
-        samples.append(SampleCase(input=sample_input.strip(), output=sample_output.strip()))
+        sample_input = sample_input.strip()
+        sample_output = sample_output.strip()
+        if not sample_input or not sample_output:
+            continue
+        samples.append(SampleCase(input=sample_input, output=sample_output))
         input_section.decompose()
         output_section.decompose()
     return samples

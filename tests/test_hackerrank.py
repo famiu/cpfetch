@@ -67,3 +67,17 @@ def test_does_not_cross_pair_samples_after_an_unmatched_input() -> None:
     assert data is not None
     assert [(sample.input, sample.output) for sample in data.samples] == [("2", "5")]
     assert "orphan" in data.body_html
+
+
+def test_preserves_sample_blocks_with_empty_bodies() -> None:
+    html = """<div class="challenge-body-html">
+      <div class="challenge_sample_input"><div class="challenge_sample_input_body">  </div></div>
+      <div class="challenge_sample_output"><div class="challenge_sample_output_body">5</div></div>
+    </div>"""
+
+    data = HackerRankParser().extract_data(html, "https://www.hackerrank.com/challenges/solve-me-first/problem")
+
+    assert data is not None
+    assert data.samples == []
+    assert "challenge_sample_input" in data.body_html
+    assert "challenge_sample_output" in data.body_html
